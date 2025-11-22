@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>二年级数学 · 世界二：百数王国（6合1小游戏）</title>
+  <title>二年级数学 · 世界二：百数王国</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -17,7 +17,10 @@
       align-items: flex-start;
       padding: 20px 10px 40px;
     }
-    .container { width: 100%; max-width: 1024px; }
+    .container {
+      width: 100%;
+      max-width: 1100px;
+    }
     a.back {
       display: inline-block;
       margin-bottom: 8px;
@@ -26,28 +29,35 @@
       text-decoration: none;
     }
     a.back:hover { text-decoration: underline; }
-    h1 { margin: 4px 0 4px; font-size: 24px; }
-    .subtitle { font-size: 14px; color: #9ca3af; margin-bottom: 16px; }
+
+    h1 {
+      margin: 4px 0 4px;
+      font-size: 24px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
 
     .card {
       background: rgba(15,23,42,0.96);
       border-radius: 18px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: 0 16px 40px rgba(15,23,42,0.9);
       border: 1px solid #1f2937;
     }
 
-    /* 模式选择条 */
     .mode-bar {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .mode-btn {
       border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
+      padding: 6px 14px;
+      font-size: 14px;
       border: 1px solid #374151;
       background: #020617;
       color: #e5e7eb;
@@ -65,13 +75,8 @@
       color: #e5f0ff;
     }
 
-    .game-section {
-      display: none;
-      margin-top: 8px;
-    }
-    .game-section.active {
-      display: block;
-    }
+    .game-section { display: none; margin-top: 6px; }
+    .game-section.active { display: block; }
 
     .top-bar {
       display: flex;
@@ -85,11 +90,11 @@
     }
 
     .board {
-      margin: 8px 0 14px;
+      margin: 6px 0 12px;
       border-radius: 14px;
       border: 1px solid #1f2937;
-      background: linear-gradient(to bottom, #020617, #020617);
-      padding: 10px;
+      background: #020617;
+      padding: 14px;
     }
 
     .prompt {
@@ -98,9 +103,9 @@
     }
 
     .feedback {
-      min-height: 22px;
+      min-height: 20px;
       font-size: 14px;
-      margin-top: 4px;
+      margin-top: 6px;
     }
     .feedback.ok { color: #4ade80; }
     .feedback.bad { color: #fca5a5; }
@@ -115,7 +120,7 @@
     }
     .btn {
       border-radius: 999px;
-      padding: 6px 14px;
+      padding: 6px 16px;
       font-size: 14px;
       border: none;
       cursor: pointer;
@@ -134,6 +139,9 @@
       background: transparent;
       border: 1px solid #4b5563;
       color: #9ca3af;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .num-grid {
@@ -173,23 +181,39 @@
       gap: 4px;
       flex-wrap: wrap;
       justify-content: center;
+      margin-top: 10px;
     }
     .nl-point {
-      min-width: 24px;
+      min-width: 26px;
       padding: 4px 2px;
       text-align: center;
-      font-size: 12px;
+      font-size: 13px;
       border-radius: 6px;
       border: 1px solid #1f2937;
       color: #e5e7eb;
+      background: #020617;
     }
-    .nl-point.start { background: #1d4ed8; }
-    .nl-point.end { background: #15803d; }
-    .nl-arrow {
-      font-size: 16px;
-      margin: 4px 0;
+    .nl-tip {
       text-align: center;
+      font-size: 14px;
       color: #93c5fd;
+      margin-top: 8px;
+    }
+
+    /* 玩法2：拆十 */
+    .pile-label {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .pile-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+      font-size: 22px;
+      min-height: 28px;
     }
 
     /* 玩法3：百数表 */
@@ -199,6 +223,7 @@
       gap: 3px;
       max-height: 260px;
       overflow-y: auto;
+      margin-top: 10px;
     }
     .hundred-cell {
       font-size: 11px;
@@ -209,10 +234,6 @@
       background: #020617;
       color: #e5e7eb;
       cursor: pointer;
-    }
-    .hundred-cell.target {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px #0ea5e9;
     }
     .hundred-cell.correct {
       background: #15803d;
@@ -246,6 +267,7 @@
       display: grid;
       gap: 4px;
       justify-content: center;
+      margin-top: 8px;
     }
     .array-row {
       display: flex;
@@ -264,11 +286,12 @@
       font-size: 16px;
     }
 
-    /* 玩法6：口诀翻翻牌（简化配对） */
+    /* 玩法6：配对 */
     .pair-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0,1fr));
       gap: 8px;
+      margin-top: 10px;
     }
     .pair-card {
       border-radius: 10px;
@@ -292,6 +315,10 @@
       color: #e5fdf0;
       cursor: default;
     }
+
+    @media (max-width: 640px) {
+      .num-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
   </style>
 </head>
 <body>
@@ -314,16 +341,16 @@
         <button class="mode-btn" data-mode="6">玩法六：乘法口诀配对</button>
       </div>
 
-      <!-- 玩法1：数轴跳一跳 -->
+      <!-- 玩法一：数轴跳一跳 -->
       <section id="mode-1" class="game-section active">
         <div class="top-bar">
           <div>玩法一：用数轴来做 20 以内加法</div>
           <div>得分：<span id="m1-score">0</span></div>
         </div>
         <div class="board">
-          <div class="prompt" id="m1-prompt">题目：7 + 5 = ?</div>
+          <div class="prompt" id="m1-prompt">题目：8 + 6 = ?</div>
           <div class="number-line" id="m1-line"></div>
-          <div class="nl-arrow" id="m1-arrow"></div>
+          <div class="nl-tip" id="m1-tip">从 8 开始，向前跳 6 格，会到哪里呢？</div>
         </div>
         <div class="prompt">请点击你认为正确的答案：</div>
         <div class="num-grid" id="m1-num-grid"></div>
@@ -334,7 +361,7 @@
         </div>
       </section>
 
-      <!-- 玩法2：拆十小工坊 -->
+      <!-- 玩法二：拆十小工坊（上下两堆） -->
       <section id="mode-2" class="game-section">
         <div class="top-bar">
           <div>玩法二：用“凑十”的方法做加法</div>
@@ -342,21 +369,21 @@
         </div>
         <div class="board">
           <div class="prompt" id="m2-prompt">题目：9 + 6</div>
-          <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
-  <!-- 上方一堆 -->
-  <div style="text-align:center;">
-    <div style="font-size:13px; color:#9ca3af; margin-bottom:4px;">上面的一堆</div>
-    <div id="m2-left" style="display:flex; flex-wrap:wrap; gap:4px; font-size:24px; justify-content:center;"></div>
-  </div>
-  <!-- 中间提示箭头 -->
-  <div style="font-size:24px; color:#38bdf8;">⬇️</div>
-  <!-- 下方一堆 -->
-  <div style="text-align:center;">
-    <div style="font-size:13px; color:#9ca3af; margin-bottom:4px;">下面的一堆</div>
-    <div id="m2-right" style="display:flex; flex-wrap:wrap; gap:4px; font-size:24px; justify-content:center;"></div>
-  </div>
-</div>
-
+          <div style="display:flex; flex-direction:column; gap:16px; align-items:center; margin-top:10px;">
+            <div>
+              <div class="pile-label">上面的一堆</div>
+              <div id="m2-left" class="pile-row"></div>
+            </div>
+            <div style="font-size:26px; color:#38bdf8;">⬇️</div>
+            <div>
+              <div class="pile-label">下面的一堆</div>
+              <div id="m2-right" class="pile-row"></div>
+            </div>
+          </div>
+          <div style="font-size:13px; color:#cbd5f5; margin-top:10px;">
+            提示：想象从下面搬一些小方块到上面，让上面“刚好变成 10”，再看还剩多少。
+          </div>
+        </div>
         <div class="prompt">下面哪一句是对这道题的最好解释？</div>
         <div class="num-grid" id="m2-options"></div>
         <div class="feedback" id="m2-feedback"></div>
@@ -366,7 +393,7 @@
         </div>
       </section>
 
-      <!-- 玩法3：百数表寻宝 -->
+      <!-- 玩法三：百数表寻宝 -->
       <section id="mode-3" class="game-section">
         <div class="top-bar">
           <div>玩法三：在百数表上找数字</div>
@@ -382,7 +409,7 @@
         </div>
       </section>
 
-      <!-- 玩法4：小商店买东西 -->
+      <!-- 玩法四：小商店买东西 -->
       <section id="mode-4" class="game-section">
         <div class="top-bar">
           <div>玩法四：用加减法买东西</div>
@@ -400,7 +427,8 @@
           <button class="btn btn-main" id="m4-next" disabled>下一题 ▶</button>
         </div>
       </section>
-            <!-- 玩法5：乘法阵列农场（两步：先选算式，再选结果） -->
+
+      <!-- 玩法五：乘法阵列农场（两步：公式 + 结果） -->
       <section id="mode-5" class="game-section">
         <div class="top-bar">
           <div>玩法五：几行几列有多少个？</div>
@@ -412,16 +440,16 @@
           </div>
           <div class="array-grid" id="m5-array"></div>
         </div>
-        <!-- 第一步：选算式 -->
         <div class="prompt" id="m5-step1-label">
           第一步：下面哪一句算式，最符合“有几行，每行有几个”？
         </div>
         <div class="num-grid" id="m5-exp-options"></div>
-        <!-- 第二步：选结果 -->
+
         <div class="prompt" id="m5-step2-label" style="display:none;">
           第二步：你选的这个算式，结果是多少？
         </div>
         <div class="num-grid" id="m5-num-options" style="display:none;"></div>
+
         <div class="feedback" id="m5-feedback"></div>
         <div class="controls">
           <button class="btn btn-ghost" id="m5-restart">🔁 换一题</button>
@@ -429,14 +457,16 @@
         </div>
       </section>
 
-      <!-- 玩法6：乘法口诀配对 -->
+      <!-- 玩法六：乘法口诀配对 -->
       <section id="mode-6" class="game-section">
         <div class="top-bar">
           <div>玩法六：2～5 的乘法口诀配对</div>
           <div>完成数：<span id="m6-done">0</span>/4</div>
         </div>
         <div class="board">
-          <div class="prompt">点击一张“算式”卡片，再点击一张“答案”卡片，配对成功就会亮起来。</div>
+          <div class="prompt">
+            点击一张“算式”卡片，再点击一张“答案”卡片，配对成功就会亮起来。
+          </div>
           <div class="pair-grid" id="m6-grid"></div>
         </div>
         <div class="feedback" id="m6-feedback"></div>
@@ -444,7 +474,6 @@
           <button class="btn btn-ghost" id="m6-restart">🔁 重新洗牌</button>
         </div>
       </section>
-
     </div>
   </div>
 
@@ -461,32 +490,32 @@
         sec.classList.toggle("active", sec.id === "mode-" + mode);
       });
     }
-
     modeButtons.forEach(btn => {
       btn.addEventListener("click", () => switchMode(btn.dataset.mode));
     });
 
-    // 工具函数
+    // 小工具
     function shuffle(arr) {
       return arr.sort(() => Math.random() - 0.5);
     }
 
-    // 玩法1：数轴跳一跳（20内加法）
+    /* ---------- 玩法一：数轴跳一跳 ---------- */
     (function() {
       const scoreEl = document.getElementById("m1-score");
       const promptEl = document.getElementById("m1-prompt");
       const lineEl = document.getElementById("m1-line");
-      const arrowEl = document.getElementById("m1-arrow");
+      const tipEl = document.getElementById("m1-tip");
       const numGridEl = document.getElementById("m1-num-grid");
       const feedbackEl = document.getElementById("m1-feedback");
       const nextBtn = document.getElementById("m1-next");
       const restartBtn = document.getElementById("m1-restart");
 
-      let a = 7, b = 5, answer = 12;
+      let a = 8, b = 6, answer = 14;
       let score = 0;
       let answered = false;
 
-      function setupNumButtons() {
+      function buildAnswerButtons() {
+        numGridEl.innerHTML = "";
         for (let i = 0; i <= 20; i++) {
           const btn = document.createElement("button");
           btn.className = "num-btn";
@@ -499,14 +528,12 @@
       function renderNumberLine() {
         lineEl.innerHTML = "";
         for (let i = 0; i <= 20; i++) {
-          const span = document.createElement("div");
-          span.className = "nl-point";
-          span.textContent = i;
-          if (i === a) span.classList.add("start");
-          if (i === answer) span.classList.add("end");
-          lineEl.appendChild(span);
+          const div = document.createElement("div");
+          div.className = "nl-point";
+          div.textContent = i;
+          lineEl.appendChild(div);
         }
-        m1Tip.innerHTML = `从 ${start} 开始，向前跳 ${steps} 格，会到哪个数字呢？`;
+        tipEl.textContent = `从 ${a} 开始，向前跳 ${b} 格，会到哪个数字呢？`;
       }
 
       function newQuestion() {
@@ -519,13 +546,11 @@
           btn.classList.remove("correct","wrong");
         });
 
-        // 生成 20 内加法题
         a = Math.floor(Math.random() * 16); // 0~15
         b = Math.floor(Math.random() * 9) + 1; // 1~9
-        if (a + b > 20) { // 保证不超20
-          a = 20 - b;
-        }
+        if (a + b > 20) a = 20 - b;
         answer = a + b;
+
         promptEl.textContent = `题目：${a} + ${b} = ?`;
         renderNumberLine();
       }
@@ -534,14 +559,15 @@
         if (answered) return;
         answered = true;
         numGridEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+
         if (val === answer) {
           btn.classList.add("correct");
-          feedbackEl.textContent = "✅ 很好！你和小人一起跳到了正确的位置。";
+          feedbackEl.textContent = "✅ 很好！你自己在数轴上找到了正确的答案。";
           feedbackEl.classList.add("ok");
           score += 10;
         } else {
           btn.classList.add("wrong");
-          feedbackEl.textContent = `❌ 这次正确答案是 ${answer}，一起看看数轴上是怎么跳的。`;
+          feedbackEl.textContent = `❌ 这次正确答案是 ${answer}，可以在数轴上再从 ${a} 一个个往后数。`;
           feedbackEl.classList.add("bad");
         }
         scoreEl.textContent = score;
@@ -555,11 +581,11 @@
         newQuestion();
       });
 
-      setupNumButtons();
+      buildAnswerButtons();
       newQuestion();
     })();
 
-    // 玩法2：拆十小工坊
+    /* ---------- 玩法二：拆十小工坊 ---------- */
     (function() {
       const scoreEl = document.getElementById("m2-score");
       const promptEl = document.getElementById("m2-prompt");
@@ -574,23 +600,18 @@
       let score = 0;
       let answered = false;
 
-      function getEmoji() {
-        const arr = ["🟦","🟥","🟨","🟩","🟪"];
-        return arr[Math.floor(Math.random()*arr.length)];
-      }
-
       function renderPiles() {
         leftEl.innerHTML = "";
         rightEl.innerHTML = "";
-        const e = getEmoji();
+        const icon = "🟩";
         for (let i = 0; i < a; i++) {
           const span = document.createElement("span");
-          span.textContent = e;
+          span.textContent = icon;
           leftEl.appendChild(span);
         }
         for (let i = 0; i < b; i++) {
           const span = document.createElement("span");
-          span.textContent = e;
+          span.textContent = icon;
           rightEl.appendChild(span);
         }
       }
@@ -626,13 +647,17 @@
         feedbackEl.className = "feedback";
         nextBtn.disabled = true;
 
-        // 生成 6~9 + 5~9 以内的进位加法
-        a = Math.floor(Math.random()*4) + 6; // 6~9
-        b = Math.floor(Math.random()*5) + 5; // 5~9
-        if (a + b <= 10 || a + b > 19) { // 简单保证是典型“拆十”题
-          a = 9; b = Math.floor(Math.random()*5) + 2; // 9+2~9+6
+        // 生成典型“凑十”题：9+2~9+6 或 8+3~8+7
+        if (Math.random() < 0.5) {
+          a = 9;
+          b = Math.floor(Math.random() * 5) + 2; // 2~6
+        } else {
+          a = 8;
+          b = Math.floor(Math.random() * 5) + 3; // 3~7
+          if (a + b > 18) b = 3;
         }
         answer = a + b;
+
         promptEl.textContent = `题目：${a} + ${b}`;
         renderPiles();
         buildOptions();
@@ -642,14 +667,15 @@
         if (answered) return;
         answered = true;
         optionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+
         if (isCorrect) {
           btn.classList.add("correct");
-          feedbackEl.textContent = "✅ 太棒了！你学会用“先凑十”的方法来算啦。";
+          feedbackEl.textContent = "✅ 太棒了！你会用“先凑十”的方法来算啦。";
           feedbackEl.classList.add("ok");
           score += 10;
         } else {
           btn.classList.add("wrong");
-          feedbackEl.textContent = "❌ 再看看左边是如何凑成 10 的，选那句有“10 + …”的更好。";
+          feedbackEl.textContent = "❌ 想一想：把上面那一堆先凑成 10，会写成 10 + ？";
           feedbackEl.classList.add("bad");
         }
         scoreEl.textContent = score;
@@ -666,7 +692,7 @@
       newQuestion();
     })();
 
-    // 玩法3：百数表寻宝
+    /* ---------- 玩法三：百数表寻宝 ---------- */
     (function() {
       const scoreEl = document.getElementById("m3-score");
       const gridEl = document.getElementById("m3-grid");
@@ -676,41 +702,41 @@
 
       let target = 37;
       let score = 0;
+      let locked = false;
 
       function buildGrid() {
         gridEl.innerHTML = "";
         for (let i = 1; i <= 100; i++) {
-          const btn = document.createElement("div");
-          btn.className = "hundred-cell";
-          btn.textContent = i;
-          btn.addEventListener("click", () => handleClick(i, btn));
-          gridEl.appendChild(btn);
+          const cell = document.createElement("div");
+          cell.className = "hundred-cell";
+          cell.textContent = i;
+          cell.addEventListener("click", () => handleClick(i, cell));
+          gridEl.appendChild(cell);
         }
       }
 
       function newQuestion() {
+        locked = false;
         feedbackEl.textContent = "";
         feedbackEl.className = "feedback";
-        target = Math.floor(Math.random()*100) + 1;
+        target = Math.floor(Math.random() * 100) + 1;
         promptEl.textContent = `请在下面的百数表中找到 ${target}，点击它。`;
-        gridEl.querySelectorAll(".hundred-cell").forEach(cell => {
-          cell.classList.remove("target","correct","wrong");
-          if (Number(cell.textContent) === target) {
-            cell.classList.add("target");
-          }
+        gridEl.querySelectorAll(".hundred-cell").forEach(c => {
+          c.classList.remove("correct","wrong");
         });
       }
 
       function handleClick(num, cell) {
-        if (feedbackEl.textContent) return; // 本题已答过
+        if (locked) return;
+        locked = true;
         if (num === target) {
           cell.classList.add("correct");
-          feedbackEl.textContent = `✅ 很棒！你找到了 ${target}。`;
+          feedbackEl.textContent = `✅ 找对了！这个格子就是 ${target}。`;
           feedbackEl.classList.add("ok");
           score += 10;
         } else {
           cell.classList.add("wrong");
-          feedbackEl.textContent = `❌ 这不是 ${target}，再看看第几行第几列呢？`;
+          feedbackEl.textContent = `❌ 这不是 ${target}，可以看看它在第几行第几列，再找一找。`;
           feedbackEl.classList.add("bad");
         }
         scoreEl.textContent = score;
@@ -724,7 +750,7 @@
       newQuestion();
     })();
 
-    // 玩法4：小商店买东西
+    /* ---------- 玩法四：小商店买东西 ---------- */
     (function() {
       const scoreEl = document.getElementById("m4-score");
       const promptEl = document.getElementById("m4-prompt");
@@ -767,29 +793,28 @@
         nextBtn.disabled = true;
 
         renderItems();
-        // 随机选择“有多少钱”
         money = Math.random() < 0.5 ? 50 : 100;
-        // 随机选商品
         chosen = items[Math.floor(Math.random()*items.length)];
-        // 一律做“找零”题
         correctAnswer = money - chosen.price;
-        promptEl.textContent = `你有 ${money} 元，买一个 ${chosen.price} 元的【${chosen.name}】，还剩多少钱？`;
+
+        promptEl.textContent =
+          `你有 ${money} 元，买一个 ${chosen.price} 元的【${chosen.name}】，还剩多少钱？`;
+
         buildOptions();
       }
 
       function buildOptions() {
         optionsEl.innerHTML = "";
         const opts = [correctAnswer];
-        // 生成两个干扰项
         let d1 = correctAnswer + (Math.random()<0.5 ? -2 : 2);
         let d2 = correctAnswer + (Math.random()<0.5 ? -5 : 5);
         if (d1 < 0) d1 = correctAnswer + 3;
         if (d2 < 0) d2 = correctAnswer + 4;
         opts.push(d1, d2);
         const unique = [...new Set(opts)];
-        const shuffled = shuffle(unique);
+        const arr = shuffle(unique);
 
-        shuffled.forEach(val => {
+        arr.forEach(val => {
           const btn = document.createElement("button");
           btn.className = "num-btn";
           btn.textContent = val + " 元";
@@ -802,6 +827,7 @@
         if (answered) return;
         answered = true;
         optionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+
         if (val === correctAnswer) {
           btn.classList.add("correct");
           feedbackEl.textContent = "✅ 很棒！你算对了找回来的钱。";
@@ -809,7 +835,8 @@
           score += 10;
         } else {
           btn.classList.add("wrong");
-          feedbackEl.textContent = `❌ 再想想：${money} − ${chosen.price} = ${correctAnswer}。`;
+          feedbackEl.textContent =
+            `❌ 正确结果是 ${money} − ${chosen.price} = ${correctAnswer}（元）。`;
           feedbackEl.classList.add("bad");
         }
         scoreEl.textContent = score;
@@ -826,7 +853,7 @@
       newQuestion();
     })();
 
-        // 玩法5：乘法阵列农场（先选算式，再选结果）
+    /* ---------- 玩法五：乘法阵列农场（两步） ---------- */
     (function() {
       const scoreEl = document.getElementById("m5-score");
       const promptEl = document.getElementById("m5-prompt");
@@ -842,11 +869,10 @@
       const icons = ["🐤","🐑","🐄","🌽","🍓"];
       let rows = 3, cols = 4, answer = 12;
       let score = 0;
-      let expChosenCorrect = false; // 第一步是否正确完成
+      let expChosenCorrect = false;
 
       function renderArray() {
         arrayEl.innerHTML = "";
-        arrayEl.style.gridTemplateRows = `repeat(${rows}, auto)`;
         const icon = icons[Math.floor(Math.random()*icons.length)];
         for (let r = 0; r < rows; r++) {
           const rowDiv = document.createElement("div");
@@ -861,28 +887,27 @@
         }
       }
 
-      // 第一步：选算式
       function buildExpOptions() {
         expOptionsEl.innerHTML = "";
         numOptionsEl.innerHTML = "";
-        expChosenCorrect = false;
         step2LabelEl.style.display = "none";
         numOptionsEl.style.display = "none";
+        expChosenCorrect = false;
         nextBtn.disabled = true;
 
         const correctExp = `${rows} × ${cols}`;
-        const wrong1 = `${cols} × ${rows}`;        // 常见混淆：顺序颠倒
+        const wrong1 = `${cols} × ${rows}`;
         const wrong2 = `${rows} + ${cols}`;
         const wrong3 = `${cols} + ${cols}`;
 
-        const options = shuffle([
-          { text: correctExp, correct: true },
-          { text: wrong1, correct: false },
-          { text: wrong2, correct: false },
-          { text: wrong3, correct: false }
+        const arr = shuffle([
+          {text: correctExp, correct:true},
+          {text: wrong1, correct:false},
+          {text: wrong2, correct:false},
+          {text: wrong3, correct:false}
         ]);
 
-        options.forEach(opt => {
+        arr.forEach(opt => {
           const btn = document.createElement("button");
           btn.className = "num-btn";
           btn.style.fontSize = "14px";
@@ -893,53 +918,43 @@
       }
 
       function handleExpClick(opt, btn) {
-        if (expChosenCorrect) return; // 已经选对了就不再处理
+        if (expChosenCorrect) return;
 
-        expOptionsEl.querySelectorAll(".num-btn").forEach(b => {
-          b.disabled = true;
-        });
+        expOptionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
 
         if (opt.correct) {
           btn.classList.add("correct");
-          feedbackEl.textContent = "✅ 很好！“行数在前，每行有几个在后”，所以要写成 行数 × 每行个数。";
+          feedbackEl.textContent =
+            "✅ 行数在前，每行有几个在后，所以写成“行数 × 每行个数”。";
           feedbackEl.className = "feedback ok";
           expChosenCorrect = true;
-
-          // 打开第二步：选结果
           step2LabelEl.style.display = "block";
           numOptionsEl.style.display = "grid";
           buildNumOptions();
         } else {
           btn.classList.add("wrong");
           feedbackEl.textContent =
-            `❌ 想一想：题目说“${rows} 行，每行 ${cols} 个”，所以前面的数应该表示“有几行”？`;
+            `❌ 再想一想：题目里先说“${rows} 行”，所以算式前面的数应该是几行？`;
           feedbackEl.className = "feedback bad";
 
-          // 允许重新选择：解除禁用，但保持这个是红色
           setTimeout(() => {
             expOptionsEl.querySelectorAll(".num-btn").forEach(b => {
-              if (!b.classList.contains("correct") && !b.classList.contains("wrong")) {
-                b.disabled = false;
-              } else if (b !== btn) {
-                b.disabled = false;
-              } else {
-                // 错的这一个也可以再点，只是颜色留着提示一下
-                b.disabled = false;
-              }
+              b.disabled = false;
             });
           }, 400);
         }
       }
 
-      // 第二步：选结果
       function buildNumOptions() {
         numOptionsEl.innerHTML = "";
         feedbackEl.textContent = "";
         feedbackEl.className = "feedback";
+
         const correct = answer;
-        const wrong1 = correct + (Math.random() < 0.5 ? -2 : 2);
-        const wrong2 = correct + (Math.random() < 0.5 ? -4 : 4);
+        const wrong1 = correct + (Math.random()<0.5 ? -2 : 2);
+        const wrong2 = correct + (Math.random()<0.5 ? -4 : 4);
         const arr = shuffle([correct, wrong1, wrong2]);
+
         arr.forEach(val => {
           const btn = document.createElement("button");
           btn.className = "num-btn";
@@ -951,16 +966,17 @@
 
       function handleNumClick(val, btn) {
         numOptionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+
         if (val === answer) {
           btn.classList.add("correct");
           feedbackEl.textContent =
-            `✅ 太棒了！你不仅写对了算式 ${rows} × ${cols}，还知道等于 ${answer}。`;
+            `✅ 太棒了！你既写对了 ${rows} × ${cols}，又算出了结果是 ${answer}。`;
           feedbackEl.className = "feedback ok";
           score += 10;
         } else {
           btn.classList.add("wrong");
           feedbackEl.textContent =
-            `❌ 再数一数：一共有 ${rows} 行，每行 ${cols} 个，一共就是 ${rows}×${cols}=${answer}。`;
+            `❌ 再数一数：一共有 ${rows} 行，每行 ${cols} 个，就是 ${rows}×${cols}=${answer}。`;
           feedbackEl.className = "feedback bad";
         }
         scoreEl.textContent = score;
@@ -970,14 +986,13 @@
       function newQuestion() {
         feedbackEl.textContent = "";
         feedbackEl.className = "feedback";
-        // 行列随机，2～5
-        rows = Math.floor(Math.random() * 4) + 2;
-        cols = Math.floor(Math.random() * 4) + 2;
+
+        rows = Math.floor(Math.random()*4) + 2; // 2~5
+        cols = Math.floor(Math.random()*4) + 2; // 2~5
         answer = rows * cols;
 
         promptEl.textContent =
-          `这里有 ${rows} 行，每行 ${cols} 个，一共有多少个？`;
-
+          `这里有 ${rows} 行，每行 ${cols} 个小动物，一共有多少个？`;
         renderArray();
         buildExpOptions();
       }
@@ -991,7 +1006,8 @@
 
       newQuestion();
     })();
-    // 玩法6：乘法口诀配对
+
+    /* ---------- 玩法六：乘法口诀配对 ---------- */
     (function() {
       const gridEl = document.getElementById("m6-grid");
       const feedbackEl = document.getElementById("m6-feedback");
@@ -1018,9 +1034,9 @@
         first = null;
 
         cards = [];
-        pairs.forEach((p, index) => {
-          cards.push({ id: "e"+index, type:"expr", text:p.expr, pairIndex:index });
-          cards.push({ id: "v"+index, type:"val", text:String(p.value), pairIndex:index });
+        pairs.forEach((p, idx) => {
+          cards.push({ id:"e"+idx, type:"expr", text:p.expr, pairIndex:idx });
+          cards.push({ id:"v"+idx, type:"val", text:String(p.value), pairIndex:idx });
         });
         shuffle(cards);
 
@@ -1046,12 +1062,10 @@
           feedbackEl.textContent = "";
           feedbackEl.className = "feedback";
         } else {
-          // 第二次点击
           const p1 = first.dataset.pairIndex;
           const p2 = cardEl.dataset.pairIndex;
           cardEl.classList.add("active");
           if (p1 === p2 && first.dataset.type !== cardEl.dataset.type) {
-            // 配对成功
             first.classList.remove("active");
             cardEl.classList.remove("active");
             first.classList.add("matched");
