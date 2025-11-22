@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>二年级数学 · 世界二：百数王国（6合1小游戏）</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at top, #0f172a, #020617 60%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 10px 40px;
+    }
+    .container { width: 100%; max-width: 1024px; }
+    a.back {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    a.back:hover { text-decoration: underline; }
+    h1 { margin: 4px 0 4px; font-size: 24px; }
+    .subtitle { font-size: 14px; color: #9ca3af; margin-bottom: 16px; }
+
+    .card {
+      background: rgba(15,23,42,0.96);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.9);
+      border: 1px solid #1f2937;
+    }
+
+    /* 模式选择条 */
+    .mode-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .mode-btn {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+    .mode-btn:hover {
+      background: #0b1120;
+      border-color: #38bdf8;
+    }
+    .mode-btn.active {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #e5f0ff;
+    }
+
+    .game-section {
+      display: none;
+      margin-top: 8px;
+    }
+    .game-section.active {
+      display: block;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #9ca3af;
+    }
+
+    .board {
+      margin: 8px 0 14px;
+      border-radius: 14px;
+      border: 1px solid #1f2937;
+      background: linear-gradient(to bottom, #020617, #020617);
+      padding: 10px;
+    }
+
+    .prompt {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .feedback {
+      min-height: 22px;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .feedback.ok { color: #4ade80; }
+    .feedback.bad { color: #fca5a5; }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .btn-main {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-main:disabled {
+      background: #1f2937;
+      color: #6b7280;
+      cursor: not-allowed;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid #4b5563;
+      color: #9ca3af;
+    }
+
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .num-btn {
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 16px;
+      padding: 6px 0;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .num-btn:hover {
+      background: #0b1120;
+      border-color: #38bdf8;
+    }
+    .num-btn.correct {
+      background: #16a34a;
+      border-color: #22c55e;
+      color: #e5fdf0;
+    }
+    .num-btn.wrong {
+      background: #7f1d1d;
+      border-color: #ef4444;
+      color: #fee2e2;
+    }
+
+    /* 玩法1：数轴 */
+    .number-line {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nl-point {
+      min-width: 24px;
+      padding: 4px 2px;
+      text-align: center;
+      font-size: 12px;
+      border-radius: 6px;
+      border: 1px solid #1f2937;
+      color: #e5e7eb;
+    }
+    .nl-point.start { background: #1d4ed8; }
+    .nl-point.end { background: #15803d; }
+    .nl-arrow {
+      font-size: 16px;
+      margin: 4px 0;
+      text-align: center;
+      color: #93c5fd;
+    }
+
+    /* 玩法3：百数表 */
+    .hundred-grid {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0,1fr));
+      gap: 3px;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+    .hundred-cell {
+      font-size: 11px;
+      padding: 4px 0;
+      text-align: center;
+      border-radius: 6px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+    .hundred-cell.target {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px #0ea5e9;
+    }
+    .hundred-cell.correct {
+      background: #15803d;
+      border-color: #22c55e;
+    }
+    .hundred-cell.wrong {
+      background: #7f1d1d;
+      border-color: #ef4444;
+    }
+
+    /* 玩法4：小商店 */
+    .shop-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .item-card {
+      flex: 1;
+      min-width: 120px;
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+      padding: 8px;
+      background: #020617;
+      font-size: 13px;
+    }
+    .item-name { font-weight: bold; margin-bottom: 4px; }
+    .item-price { color: #a5b4fc; }
+
+    /* 玩法5：乘法阵列 */
+    .array-grid {
+      display: grid;
+      gap: 4px;
+      justify-content: center;
+    }
+    .array-row {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+    .array-cell {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+    }
+
+    /* 玩法6：口诀翻翻牌（简化配对） */
+    .pair-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 8px;
+    }
+    .pair-card {
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .15s ease;
+      min-height: 36px;
+    }
+    .pair-card.active {
+      background: #1d4ed8;
+      border-color: #60a5fa;
+    }
+    .pair-card.matched {
+      background: #16a34a;
+      border-color: #22c55e;
+      color: #e5fdf0;
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="math.html" class="back">⏪ 返回数学学习中心</a>
+
+    <h1>二年级数学 · 世界二：百数王国</h1>
+    <div class="subtitle">
+      本世界有 <b>6 种小游戏</b>：数轴跳一跳、拆十小工坊、百数表寻宝、小商店买东西、乘法阵列农场、乘法口诀配对。
+      请选择一种玩法开始闯关吧！
+    </div>
+
+    <div class="card">
+      <div class="mode-bar">
+        <button class="mode-btn active" data-mode="1">玩法一：数轴跳一跳</button>
+        <button class="mode-btn" data-mode="2">玩法二：拆十小工坊</button>
+        <button class="mode-btn" data-mode="3">玩法三：百数表寻宝</button>
+        <button class="mode-btn" data-mode="4">玩法四：小商店买东西</button>
+        <button class="mode-btn" data-mode="5">玩法五：乘法阵列农场</button>
+        <button class="mode-btn" data-mode="6">玩法六：乘法口诀配对</button>
+      </div>
+
+      <!-- 玩法1：数轴跳一跳 -->
+      <section id="mode-1" class="game-section active">
+        <div class="top-bar">
+          <div>玩法一：用数轴来做 20 以内加法</div>
+          <div>得分：<span id="m1-score">0</span></div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m1-prompt">题目：7 + 5 = ?</div>
+          <div class="number-line" id="m1-line"></div>
+          <div class="nl-arrow" id="m1-arrow"></div>
+        </div>
+        <div class="prompt">请点击你认为正确的答案：</div>
+        <div class="num-grid" id="m1-num-grid"></div>
+        <div class="feedback" id="m1-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m1-restart">🔁 换一题</button>
+          <button class="btn btn-main" id="m1-next" disabled>下一题 ▶</button>
+        </div>
+      </section>
+
+      <!-- 玩法2：拆十小工坊 -->
+      <section id="mode-2" class="game-section">
+        <div class="top-bar">
+          <div>玩法二：用“凑十”的方法做加法</div>
+          <div>得分：<span id="m2-score">0</span></div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m2-prompt">题目：9 + 6</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+            <div>
+              <div style="font-size:13px; color:#9ca3af;">左边的一堆</div>
+              <div id="m2-left" style="display:flex; flex-wrap:wrap; gap:4px; font-size:20px;"></div>
+            </div>
+            <div>
+              <div style="font-size:13px; color:#9ca3af;">右边的一堆</div>
+              <div id="m2-right" style="display:flex; flex-wrap:wrap; gap:4px; font-size:20px;"></div>
+            </div>
+          </div>
+          <div style="font-size:13px; color:#cbd5f5; margin-top:8px;">
+            提示：从右边拖（想象）一些小方块到左边，让左边“刚好变成 10”。
+          </div>
+        </div>
+        <div class="prompt">下面哪一句是对这道题的最好解释？</div>
+        <div class="num-grid" id="m2-options"></div>
+        <div class="feedback" id="m2-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m2-restart">🔁 换一题</button>
+          <button class="btn btn-main" id="m2-next" disabled>下一题 ▶</button>
+        </div>
+      </section>
+
+      <!-- 玩法3：百数表寻宝 -->
+      <section id="mode-3" class="game-section">
+        <div class="top-bar">
+          <div>玩法三：在百数表上找数字</div>
+          <div>得分：<span id="m3-score">0</span></div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m3-prompt">请在下面的百数表中找到 37，点击它。</div>
+          <div class="hundred-grid" id="m3-grid"></div>
+        </div>
+        <div class="feedback" id="m3-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-main" id="m3-next">换一个数字 ▶</button>
+        </div>
+      </section>
+
+      <!-- 玩法4：小商店买东西 -->
+      <section id="mode-4" class="game-section">
+        <div class="top-bar">
+          <div>玩法四：用加减法买东西</div>
+          <div>得分：<span id="m4-score">0</span></div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m4-prompt">你有 50 元，买一个 32 元的玩具车，还剩多少钱？</div>
+          <div class="shop-items" id="m4-items"></div>
+        </div>
+        <div class="prompt">请选择正确的答案：</div>
+        <div class="num-grid" id="m4-options"></div>
+        <div class="feedback" id="m4-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m4-restart">🔁 再来一题</button>
+          <button class="btn btn-main" id="m4-next" disabled>下一题 ▶</button>
+        </div>
+      </section>
+
+      <!-- 玩法5：乘法阵列农场 -->
+      <section id="mode-5" class="game-section">
+        <div class="top-bar">
+          <div>玩法五：几行几列有多少个？</div>
+          <div>得分：<span id="m5-score">0</span></div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m5-prompt">这里有 3 行，每行 4 个小动物，一共有多少个？</div>
+          <div class="array-grid" id="m5-array"></div>
+        </div>
+        <div class="prompt">请选择正确答案：</div>
+        <div class="num-grid" id="m5-options"></div>
+        <div class="feedback" id="m5-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m5-restart">🔁 换一题</button>
+          <button class="btn btn-main" id="m5-next" disabled>下一题 ▶</button>
+        </div>
+      </section>
+
+      <!-- 玩法6：乘法口诀配对 -->
+      <section id="mode-6" class="game-section">
+        <div class="top-bar">
+          <div>玩法六：2～5 的乘法口诀配对</div>
+          <div>完成数：<span id="m6-done">0</span>/4</div>
+        </div>
+        <div class="board">
+          <div class="prompt">点击一张“算式”卡片，再点击一张“答案”卡片，配对成功就会亮起来。</div>
+          <div class="pair-grid" id="m6-grid"></div>
+        </div>
+        <div class="feedback" id="m6-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m6-restart">🔁 重新洗牌</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    // 模式切换
+    const modeButtons = document.querySelectorAll(".mode-btn");
+    const sections = document.querySelectorAll(".game-section");
+
+    function switchMode(mode) {
+      modeButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.mode === String(mode));
+      });
+      sections.forEach(sec => {
+        sec.classList.toggle("active", sec.id === "mode-" + mode);
+      });
+    }
+
+    modeButtons.forEach(btn => {
+      btn.addEventListener("click", () => switchMode(btn.dataset.mode));
+    });
+
+    // 工具函数
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    // 玩法1：数轴跳一跳（20内加法）
+    (function() {
+      const scoreEl = document.getElementById("m1-score");
+      const promptEl = document.getElementById("m1-prompt");
+      const lineEl = document.getElementById("m1-line");
+      const arrowEl = document.getElementById("m1-arrow");
+      const numGridEl = document.getElementById("m1-num-grid");
+      const feedbackEl = document.getElementById("m1-feedback");
+      const nextBtn = document.getElementById("m1-next");
+      const restartBtn = document.getElementById("m1-restart");
+
+      let a = 7, b = 5, answer = 12;
+      let score = 0;
+      let answered = false;
+
+      function setupNumButtons() {
+        for (let i = 0; i <= 20; i++) {
+          const btn = document.createElement("button");
+          btn.className = "num-btn";
+          btn.textContent = i;
+          btn.addEventListener("click", () => handleAnswer(i, btn));
+          numGridEl.appendChild(btn);
+        }
+      }
+
+      function renderNumberLine() {
+        lineEl.innerHTML = "";
+        for (let i = 0; i <= 20; i++) {
+          const span = document.createElement("div");
+          span.className = "nl-point";
+          span.textContent = i;
+          if (i === a) span.classList.add("start");
+          if (i === answer) span.classList.add("end");
+          lineEl.appendChild(span);
+        }
+        arrowEl.textContent = `从 ${a} 开始，向前跳 ${b} 格，就到了 ${answer}。`;
+      }
+
+      function newQuestion() {
+        answered = false;
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        nextBtn.disabled = true;
+        numGridEl.querySelectorAll(".num-btn").forEach(btn => {
+          btn.disabled = false;
+          btn.classList.remove("correct","wrong");
+        });
+
+        // 生成 20 内加法题
+        a = Math.floor(Math.random() * 16); // 0~15
+        b = Math.floor(Math.random() * 9) + 1; // 1~9
+        if (a + b > 20) { // 保证不超20
+          a = 20 - b;
+        }
+        answer = a + b;
+        promptEl.textContent = `题目：${a} + ${b} = ?`;
+        renderNumberLine();
+      }
+
+      function handleAnswer(val, btn) {
+        if (answered) return;
+        answered = true;
+        numGridEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+        if (val === answer) {
+          btn.classList.add("correct");
+          feedbackEl.textContent = "✅ 很好！你和小人一起跳到了正确的位置。";
+          feedbackEl.classList.add("ok");
+          score += 10;
+        } else {
+          btn.classList.add("wrong");
+          feedbackEl.textContent = `❌ 这次正确答案是 ${answer}，一起看看数轴上是怎么跳的。`;
+          feedbackEl.classList.add("bad");
+        }
+        scoreEl.textContent = score;
+        nextBtn.disabled = false;
+      }
+
+      nextBtn.addEventListener("click", newQuestion);
+      restartBtn.addEventListener("click", () => {
+        score = 0;
+        scoreEl.textContent = score;
+        newQuestion();
+      });
+
+      setupNumButtons();
+      newQuestion();
+    })();
+
+    // 玩法2：拆十小工坊
+    (function() {
+      const scoreEl = document.getElementById("m2-score");
+      const promptEl = document.getElementById("m2-prompt");
+      const leftEl = document.getElementById("m2-left");
+      const rightEl = document.getElementById("m2-right");
+      const optionsEl = document.getElementById("m2-options");
+      const feedbackEl = document.getElementById("m2-feedback");
+      const nextBtn = document.getElementById("m2-next");
+      const restartBtn = document.getElementById("m2-restart");
+
+      let a = 9, b = 6, answer = 15;
+      let score = 0;
+      let answered = false;
+
+      function getEmoji() {
+        const arr = ["🟦","🟥","🟨","🟩","🟪"];
+        return arr[Math.floor(Math.random()*arr.length)];
+      }
+
+      function renderPiles() {
+        leftEl.innerHTML = "";
+        rightEl.innerHTML = "";
+        const e = getEmoji();
+        for (let i = 0; i < a; i++) {
+          const span = document.createElement("span");
+          span.textContent = e;
+          leftEl.appendChild(span);
+        }
+        for (let i = 0; i < b; i++) {
+          const span = document.createElement("span");
+          span.textContent = e;
+          rightEl.appendChild(span);
+        }
+      }
+
+      function buildOptions() {
+        optionsEl.innerHTML = "";
+        const correctText = `${a} + ${b} = 10 + ${a + b - 10} = ${a + b}`;
+        const wrong1 = `${a} + ${b} = ${a} + ${b}`;
+        const wrong2 = `${a} + ${b} = ${b} + ${a}`;
+        const wrong3 = `先算 ${a - 1} + ${b + 1}`;
+
+        const arr = shuffle([
+          {text: correctText, correct:true},
+          {text: wrong1, correct:false},
+          {text: wrong2, correct:false},
+          {text: wrong3, correct:false}
+        ]);
+
+        arr.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.className = "num-btn";
+          btn.style.fontSize = "12px";
+          btn.style.whiteSpace = "normal";
+          btn.textContent = opt.text;
+          btn.addEventListener("click", () => handleOption(opt.correct, btn));
+          optionsEl.appendChild(btn);
+        });
+      }
+
+      function newQuestion() {
+        answered = false;
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        nextBtn.disabled = true;
+
+        // 生成 6~9 + 5~9 以内的进位加法
+        a = Math.floor(Math.random()*4) + 6; // 6~9
+        b = Math.floor(Math.random()*5) + 5; // 5~9
+        if (a + b <= 10 || a + b > 19) { // 简单保证是典型“拆十”题
+          a = 9; b = Math.floor(Math.random()*5) + 2; // 9+2~9+6
+        }
+        answer = a + b;
+        promptEl.textContent = `题目：${a} + ${b}`;
+        renderPiles();
+        buildOptions();
+      }
+
+      function handleOption(isCorrect, btn) {
+        if (answered) return;
+        answered = true;
+        optionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+        if (isCorrect) {
+          btn.classList.add("correct");
+          feedbackEl.textContent = "✅ 太棒了！你学会用“先凑十”的方法来算啦。";
+          feedbackEl.classList.add("ok");
+          score += 10;
+        } else {
+          btn.classList.add("wrong");
+          feedbackEl.textContent = "❌ 再看看左边是如何凑成 10 的，选那句有“10 + …”的更好。";
+          feedbackEl.classList.add("bad");
+        }
+        scoreEl.textContent = score;
+        nextBtn.disabled = false;
+      }
+
+      nextBtn.addEventListener("click", newQuestion);
+      restartBtn.addEventListener("click", () => {
+        score = 0;
+        scoreEl.textContent = score;
+        newQuestion();
+      });
+
+      newQuestion();
+    })();
+
+    // 玩法3：百数表寻宝
+    (function() {
+      const scoreEl = document.getElementById("m3-score");
+      const gridEl = document.getElementById("m3-grid");
+      const feedbackEl = document.getElementById("m3-feedback");
+      const promptEl = document.getElementById("m3-prompt");
+      const nextBtn = document.getElementById("m3-next");
+
+      let target = 37;
+      let score = 0;
+
+      function buildGrid() {
+        gridEl.innerHTML = "";
+        for (let i = 1; i <= 100; i++) {
+          const btn = document.createElement("div");
+          btn.className = "hundred-cell";
+          btn.textContent = i;
+          btn.addEventListener("click", () => handleClick(i, btn));
+          gridEl.appendChild(btn);
+        }
+      }
+
+      function newQuestion() {
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        target = Math.floor(Math.random()*100) + 1;
+        promptEl.textContent = `请在下面的百数表中找到 ${target}，点击它。`;
+        gridEl.querySelectorAll(".hundred-cell").forEach(cell => {
+          cell.classList.remove("target","correct","wrong");
+          if (Number(cell.textContent) === target) {
+            cell.classList.add("target");
+          }
+        });
+      }
+
+      function handleClick(num, cell) {
+        if (feedbackEl.textContent) return; // 本题已答过
+        if (num === target) {
+          cell.classList.add("correct");
+          feedbackEl.textContent = `✅ 很棒！你找到了 ${target}。`;
+          feedbackEl.classList.add("ok");
+          score += 10;
+        } else {
+          cell.classList.add("wrong");
+          feedbackEl.textContent = `❌ 这不是 ${target}，再看看第几行第几列呢？`;
+          feedbackEl.classList.add("bad");
+        }
+        scoreEl.textContent = score;
+      }
+
+      nextBtn.addEventListener("click", () => {
+        newQuestion();
+      });
+
+      buildGrid();
+      newQuestion();
+    })();
+
+    // 玩法4：小商店买东西
+    (function() {
+      const scoreEl = document.getElementById("m4-score");
+      const promptEl = document.getElementById("m4-prompt");
+      const itemsEl = document.getElementById("m4-items");
+      const optionsEl = document.getElementById("m4-options");
+      const feedbackEl = document.getElementById("m4-feedback");
+      const nextBtn = document.getElementById("m4-next");
+      const restartBtn = document.getElementById("m4-restart");
+
+      const items = [
+        { name:"玩具车", price:32 },
+        { name:"机器人", price:45 },
+        { name:"小熊", price:28 },
+        { name:"拼图", price:19 },
+        { name:"足球", price:36 }
+      ];
+      let money = 50;
+      let chosen = null;
+      let correctAnswer = 0;
+      let score = 0;
+      let answered = false;
+
+      function renderItems() {
+        itemsEl.innerHTML = "";
+        items.forEach(it => {
+          const card = document.createElement("div");
+          card.className = "item-card";
+          card.innerHTML = `
+            <div class="item-name">${it.name}</div>
+            <div class="item-price">价格：${it.price} 元</div>
+          `;
+          itemsEl.appendChild(card);
+        });
+      }
+
+      function newQuestion() {
+        answered = false;
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        nextBtn.disabled = true;
+
+        renderItems();
+        // 随机选择“有多少钱”
+        money = Math.random() < 0.5 ? 50 : 100;
+        // 随机选商品
+        chosen = items[Math.floor(Math.random()*items.length)];
+        // 一律做“找零”题
+        correctAnswer = money - chosen.price;
+        promptEl.textContent = `你有 ${money} 元，买一个 ${chosen.price} 元的【${chosen.name}】，还剩多少钱？`;
+        buildOptions();
+      }
+
+      function buildOptions() {
+        optionsEl.innerHTML = "";
+        const opts = [correctAnswer];
+        // 生成两个干扰项
+        let d1 = correctAnswer + (Math.random()<0.5 ? -2 : 2);
+        let d2 = correctAnswer + (Math.random()<0.5 ? -5 : 5);
+        if (d1 < 0) d1 = correctAnswer + 3;
+        if (d2 < 0) d2 = correctAnswer + 4;
+        opts.push(d1, d2);
+        const unique = [...new Set(opts)];
+        const shuffled = shuffle(unique);
+
+        shuffled.forEach(val => {
+          const btn = document.createElement("button");
+          btn.className = "num-btn";
+          btn.textContent = val + " 元";
+          btn.addEventListener("click", () => handleAnswer(val, btn));
+          optionsEl.appendChild(btn);
+        });
+      }
+
+      function handleAnswer(val, btn) {
+        if (answered) return;
+        answered = true;
+        optionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+        if (val === correctAnswer) {
+          btn.classList.add("correct");
+          feedbackEl.textContent = "✅ 很棒！你算对了找回来的钱。";
+          feedbackEl.classList.add("ok");
+          score += 10;
+        } else {
+          btn.classList.add("wrong");
+          feedbackEl.textContent = `❌ 再想想：${money} − ${chosen.price} = ${correctAnswer}。`;
+          feedbackEl.classList.add("bad");
+        }
+        scoreEl.textContent = score;
+        nextBtn.disabled = false;
+      }
+
+      nextBtn.addEventListener("click", newQuestion);
+      restartBtn.addEventListener("click", () => {
+        score = 0;
+        scoreEl.textContent = score;
+        newQuestion();
+      });
+
+      newQuestion();
+    })();
+
+    // 玩法5：乘法阵列农场
+    (function() {
+      const scoreEl = document.getElementById("m5-score");
+      const promptEl = document.getElementById("m5-prompt");
+      const arrayEl = document.getElementById("m5-array");
+      const optionsEl = document.getElementById("m5-options");
+      const feedbackEl = document.getElementById("m5-feedback");
+      const nextBtn = document.getElementById("m5-next");
+      const restartBtn = document.getElementById("m5-restart");
+
+      const icons = ["🐤","🐑","🐄","🌽","🍓"];
+      let rows = 3, cols = 4, answer = 12;
+      let score = 0;
+      let answered = false;
+
+      function renderArray() {
+        arrayEl.innerHTML = "";
+        arrayEl.style.gridTemplateRows = `repeat(${rows}, auto)`;
+        const icon = icons[Math.floor(Math.random()*icons.length)];
+        for (let r = 0; r < rows; r++) {
+          const rowDiv = document.createElement("div");
+          rowDiv.className = "array-row";
+          for (let c = 0; c < cols; c++) {
+            const cell = document.createElement("div");
+            cell.className = "array-cell";
+            cell.textContent = icon;
+            rowDiv.appendChild(cell);
+          }
+          arrayEl.appendChild(rowDiv);
+        }
+      }
+
+      function buildOptions() {
+        optionsEl.innerHTML = "";
+        const correct = answer;
+        const wrong1 = correct + (Math.random()<0.5 ? -2 : 2);
+        const wrong2 = correct + (Math.random()<0.5 ? -4 : 4);
+        const arr = shuffle([correct, wrong1, wrong2]);
+        arr.forEach(val => {
+          const btn = document.createElement("button");
+          btn.className = "num-btn";
+          btn.textContent = val;
+          btn.addEventListener("click", () => handleAnswer(val, btn));
+          optionsEl.appendChild(btn);
+        });
+      }
+
+      function newQuestion() {
+        answered = false;
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        nextBtn.disabled = true;
+        optionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = false);
+
+        rows = Math.floor(Math.random()*4) + 2; // 2~5
+        cols = Math.floor(Math.random()*4) + 2; // 2~5
+        answer = rows * cols;
+        renderArray();
+        promptEl.textContent = `这里有 ${rows} 行，每行 ${cols} 个，一共有多少个？（其实就是 ${rows} × ${cols}）`;
+        buildOptions();
+      }
+
+      function handleAnswer(val, btn) {
+        if (answered) return;
+        answered = true;
+        optionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+        if (val === answer) {
+          btn.classList.add("correct");
+          feedbackEl.textContent = `✅ 很棒！你已经感受到 ${rows} × ${cols} = ${answer} 啦。`;
+          feedbackEl.classList.add("ok");
+          score += 10;
+        } else {
+          btn.classList.add("wrong");
+          feedbackEl.textContent = `❌ 再数一数每行有几个，总共有几行，然后做 ${rows} × ${cols}。`;
+          feedbackEl.classList.add("bad");
+        }
+        scoreEl.textContent = score;
+        nextBtn.disabled = false;
+      }
+
+      nextBtn.addEventListener("click", newQuestion);
+      restartBtn.addEventListener("click", () => {
+        score = 0;
+        scoreEl.textContent = score;
+        newQuestion();
+      });
+
+      newQuestion();
+    })();
+
+    // 玩法6：乘法口诀配对
+    (function() {
+      const gridEl = document.getElementById("m6-grid");
+      const feedbackEl = document.getElementById("m6-feedback");
+      const doneEl = document.getElementById("m6-done");
+      const restartBtn = document.getElementById("m6-restart");
+
+      const pairs = [
+        {expr:"2×3", value:6},
+        {expr:"3×4", value:12},
+        {expr:"4×5", value:20},
+        {expr:"5×3", value:15}
+      ];
+
+      let cards = [];
+      let first = null;
+      let doneCount = 0;
+
+      function buildGrid() {
+        gridEl.innerHTML = "";
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        doneCount = 0;
+        doneEl.textContent = doneCount;
+        first = null;
+
+        cards = [];
+        pairs.forEach((p, index) => {
+          cards.push({ id: "e"+index, type:"expr", text:p.expr, pairIndex:index });
+          cards.push({ id: "v"+index, type:"val", text:String(p.value), pairIndex:index });
+        });
+        shuffle(cards);
+
+        cards.forEach(c => {
+          const div = document.createElement("div");
+          div.className = "pair-card";
+          div.textContent = c.text;
+          div.dataset.id = c.id;
+          div.dataset.type = c.type;
+          div.dataset.pairIndex = c.pairIndex;
+          div.addEventListener("click", () => handleClick(div));
+          gridEl.appendChild(div);
+        });
+      }
+
+      function handleClick(cardEl) {
+        if (cardEl.classList.contains("matched")) return;
+        if (first && first === cardEl) return;
+
+        if (!first) {
+          first = cardEl;
+          cardEl.classList.add("active");
+          feedbackEl.textContent = "";
+          feedbackEl.className = "feedback";
+        } else {
+          // 第二次点击
+          const p1 = first.dataset.pairIndex;
+          const p2 = cardEl.dataset.pairIndex;
+          cardEl.classList.add("active");
+          if (p1 === p2 && first.dataset.type !== cardEl.dataset.type) {
+            // 配对成功
+            first.classList.remove("active");
+            cardEl.classList.remove("active");
+            first.classList.add("matched");
+            cardEl.classList.add("matched");
+            doneCount++;
+            doneEl.textContent = doneCount;
+            feedbackEl.textContent = "✅ 配对成功！";
+            feedbackEl.classList.add("ok");
+          } else {
+            feedbackEl.textContent = "❌ 这两张不是一对，再试试别的组合。";
+            feedbackEl.classList.add("bad");
+            const oldFirst = first;
+            setTimeout(() => {
+              oldFirst.classList.remove("active");
+              cardEl.classList.remove("active");
+            }, 400);
+          }
+          first = null;
+        }
+      }
+
+      restartBtn.addEventListener("click", buildGrid);
+      buildGrid();
+    })();
+  </script>
+</body>
+</html>
