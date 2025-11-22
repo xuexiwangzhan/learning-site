@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>四年级数学 · 世界一：数位塔楼守护</title>
+  <title>四年级数学 · 世界合集</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -19,7 +19,7 @@
     }
     .container {
       width: 100%;
-      max-width: 900px;
+      max-width: 960px;
     }
     a.back {
       display: inline-block;
@@ -37,8 +37,48 @@
     .subtitle {
       font-size: 14px;
       color: #9ca3af;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       line-height: 1.5;
+    }
+
+    /* 世界切换标签 */
+    .world-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .world-tab {
+      border-radius: 999px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 13px;
+      padding: 6px 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .15s ease;
+    }
+    .world-tab span.badge {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      color: #9ca3af;
+    }
+    .world-tab.active {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #fff;
+    }
+
+    .world {
+      display: none;
+    }
+    .world.active {
+      display: block;
     }
 
     .card {
@@ -47,6 +87,7 @@
       padding: 18px;
       box-shadow: 0 16px 40px rgba(15,23,42,0.9);
       border: 1px solid #1f2937;
+      margin-top: 8px;
     }
 
     .top-bar {
@@ -59,7 +100,7 @@
       color: #9ca3af;
       margin-bottom: 10px;
     }
-    .badge {
+    .badge-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -70,7 +111,7 @@
       font-size: 12px;
       color: #cbd5f5;
     }
-    .badge span.level {
+    .badge-pill span.level {
       font-weight: bold;
       color: #facc15;
     }
@@ -271,6 +312,20 @@
       gap: 6px;
     }
 
+    /* 世界二 专用布局 */
+    .capacity-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 14px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .capacity-highlight {
+      color: #facc15;
+      font-weight: bold;
+    }
+
     @media (max-width: 640px) {
       .big-number { font-size: 24px; }
       .num-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -281,85 +336,175 @@
   <div class="container">
     <a href="math.html" class="back">⏪ 返回数学学习中心</a>
 
-    <h1>四年级数学 · 世界一：数位塔楼守护</h1>
+    <h1>四年级数学 · 冒险世界合集</h1>
     <div class="subtitle">
-      小小守护者，你要保护<strong>大数塔楼</strong>不被数字怪物攻占。<br/>
-      每一关会出现一个大数，请你看清楚数位，回答关于“万、十万、百万、千万、亿”的问题。<br/>
-      你可以自己选择<strong>简单 / 中等 / 困难</strong>等级，三个等级都完成后，会解锁<strong>1 分钟挑战模式</strong>。
+      所有四年级数学世界都集中在这个页面：<br/>
+      世界一：数位塔楼守护（大数的数位）<br/>
+      世界二：升和毫升实验室（容量单位与换算）<br/>
+      以后还可以继续加：统计图世界、四则运算世界、垂直平行线世界……  
     </div>
 
-    <div class="card">
-      <div class="top-bar">
-        <div class="badge">
-          当前模式：
-          <span class="level" id="level-label">Lv.1 简单 · 万以内</span>
-        </div>
-        <div class="badge">
-          本等级进度：<span id="level-progress">0 / 5</span>
-        </div>
-        <div class="badge">
-          总得分：<span id="total-score">0</span>
-        </div>
-      </div>
+    <!-- 世界切换标签 -->
+    <div class="world-tabs">
+      <button class="world-tab active" data-world="world1">
+        🌆 世界一：数位塔楼守护
+        <span class="badge">大数的数位</span>
+      </button>
+      <button class="world-tab" data-world="world2">
+        🧪 世界二：升和毫升实验室
+        <span class="badge">容量单位</span>
+      </button>
+    </div>
 
-      <!-- 等级选择（孩子可自由切换） -->
-      <div class="difficulty-row">
-        <span class="diff-label">选择等级（建议先从简单开始）：</span>
-        <button class="diff-btn active" data-level="0" id="btn-level-0">简单</button>
-        <button class="diff-btn" data-level="1" id="btn-level-1">中等</button>
-        <button class="diff-btn" data-level="2" id="btn-level-2">困难</button>
-      </div>
-
-      <!-- 挑战模式区域 -->
-      <div class="challenge-zone">
-        <button class="btn btn-ghost" id="btn-challenge" disabled>
-          🔒 挑战模式：完成三个等级后解锁
-        </button>
-        <div class="challenge-status" id="challenge-status">
-          完成简单、中等、困难三个等级各 5 题后，就可以开启 60 秒挑战。
+    <!-- ================== 世界一：数位塔楼守护 ================== -->
+    <div class="world active" id="world1">
+      <div class="card">
+        <div class="top-bar">
+          <div class="badge-pill">
+            当前模式：
+            <span class="level" id="w1-level-label">Lv.1 简单 · 万以内</span>
+          </div>
+          <div class="badge-pill">
+            本等级进度：<span id="w1-level-progress">0 / 5</span>
+          </div>
+          <div class="badge-pill">
+            总得分：<span id="w1-total-score">0</span>
+          </div>
         </div>
-        <div class="leaderboard" id="leaderboard">
-          挑战排行榜：还没有记录，等你来挑战！
+
+        <div class="difficulty-row">
+          <span class="diff-label">选择等级（建议先从简单开始）：</span>
+          <button class="diff-btn active" data-w1-level="0" id="w1-btn-level-0">简单</button>
+          <button class="diff-btn" data-w1-level="1" id="w1-btn-level-1">中等</button>
+          <button class="diff-btn" data-w1-level="2" id="w1-btn-level-2">困难</button>
         </div>
-      </div>
 
-      <div class="board">
-        <div class="prompt" id="question-text">
-          题目加载中……
+        <div class="challenge-zone">
+          <button class="btn btn-ghost" id="w1-btn-challenge" disabled>
+            🔒 挑战模式：完成三个等级后解锁
+          </button>
+          <div class="challenge-status" id="w1-challenge-status">
+            完成简单、中等、困难三个等级各 5 题后，就可以开启 60 秒挑战。
+          </div>
+          <div class="leaderboard" id="w1-leaderboard">
+            挑战排行榜：还没有记录，等你来挑战！
+          </div>
         </div>
-        <div class="big-number" id="big-number">00000</div>
 
-        <div class="digit-grid" id="digit-grid">
-          <!-- JS 生成 -->
+        <div class="board">
+          <div class="prompt" id="w1-question-text">
+            题目加载中……
+          </div>
+          <div class="big-number" id="w1-big-number">00000</div>
+
+          <div class="digit-grid" id="w1-digit-grid"></div>
+          <div class="tower-tip" id="w1-tower-tip">
+            数位从右往左依次是：个、十、百、千、万、十万、百万、千万、亿……
+          </div>
         </div>
-        <div class="tower-tip" id="tower-tip">
-          数位从右往左依次是：个、十、百、千、万、十万、百万、千万、亿……
-        </div>
-      </div>
 
-      <div class="prompt">请选择你认为正确的答案：</div>
-      <div class="num-grid" id="options-grid">
-        <!-- 选项按钮 -->
-      </div>
+        <div class="prompt">请选择你认为正确的答案：</div>
+        <div class="num-grid" id="w1-options-grid"></div>
 
-      <div class="feedback" id="feedback"></div>
+        <div class="feedback" id="w1-feedback"></div>
 
-      <div class="controls">
-        <button class="btn btn-ghost" id="btn-help">📚 看提示</button>
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-ghost" id="btn-restart">🔁 重置本等级进度</button>
-          <button class="btn btn-main" id="btn-next" disabled>下一题 ▶</button>
+        <div class="controls">
+          <button class="btn btn-ghost" id="w1-btn-help">📚 看提示</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-ghost" id="w1-btn-restart">🔁 重置本等级进度</button>
+            <button class="btn btn-main" id="w1-btn-next" disabled>下一题 ▶</button>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- ================== 世界二：升和毫升实验室 ================== -->
+    <div class="world" id="world2">
+      <div class="card">
+        <div class="top-bar">
+          <div class="badge-pill">
+            当前模式：
+            <span class="level" id="w2-level-label">Lv.1 简单 · 直接换算</span>
+          </div>
+          <div class="badge-pill">
+            本等级进度：<span id="w2-level-progress">0 / 5</span>
+          </div>
+          <div class="badge-pill">
+            总得分：<span id="w2-total-score">0</span>
+          </div>
+        </div>
+
+        <div class="difficulty-row">
+          <span class="diff-label">选择等级：</span>
+          <button class="diff-btn active" data-w2-level="0" id="w2-btn-level-0">简单</button>
+          <button class="diff-btn" data-w2-level="1" id="w2-btn-level-1">中等</button>
+          <button class="diff-btn" data-w2-level="2" id="w2-btn-level-2">困难</button>
+        </div>
+
+        <div class="challenge-zone">
+          <button class="btn btn-ghost" id="w2-btn-challenge" disabled>
+            🔒 挑战模式：完成三个等级后解锁
+          </button>
+          <div class="challenge-status" id="w2-challenge-status">
+            完成三个等级各 5 题后，可以开启 60 秒“容量换算速战”。
+          </div>
+          <div class="leaderboard" id="w2-leaderboard">
+            挑战排行榜：还没有记录，等你来挑战！
+          </div>
+        </div>
+
+        <div class="board">
+          <div class="prompt" id="w2-question-text">
+            题目加载中……
+          </div>
+
+          <div class="board-inner">
+            <div class="big-number" id="w2-capacity-display">1 L = 1000 mL</div>
+            <div class="capacity-row" id="w2-capacity-tip">
+              提示：<span class="capacity-highlight">1 升 = 1000 毫升</span>。
+              先算“有多少个 1000”，再看还剩多少。
+            </div>
+          </div>
+        </div>
+
+        <div class="prompt">请选择你认为正确的答案：</div>
+        <div class="num-grid" id="w2-options-grid"></div>
+
+        <div class="feedback" id="w2-feedback"></div>
+
+        <div class="controls">
+          <button class="btn btn-ghost" id="w2-btn-help">📚 看提示</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-ghost" id="w2-btn-restart">🔁 重置本等级进度</button>
+            <button class="btn btn-main" id="w2-btn-next" disabled>下一题 ▶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // ===== 数据与状态 =====
-    const placeNames = ["个","十","百","千","万","十万","百万","千万","亿","十亿","百亿"];
-    const placeExplain = "数位从右往左依次是：个、十、百、千、万、十万、百万、千万、亿……";
+    /* ============== 世界切换按钮 ============== */
+    const worldTabs = document.querySelectorAll(".world-tab");
+    const worlds = document.querySelectorAll(".world");
+    worldTabs.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-world");
+        worldTabs.forEach(b => b.classList.remove("active"));
+        worlds.forEach(w => w.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(target).classList.add("active");
+      });
+    });
 
-    const levels = [
+    /* ================== 世界一：数位塔楼守护 ================== */
+
+    const placeNames = ["个","十","百","千","万","十万","百万","千万","亿","十亿","百亿"];
+    const placeExplain =
+      "数位从右往左依次是：个、十、百、千、万、十万、百万、千万、亿……";
+
+    const w1Levels = [
       {
         id: 1,
         name: "Lv.1 简单 · 万以内",
@@ -386,78 +531,70 @@
       }
     ];
 
-    let currentLevelIndex = 0;          // 0,1,2
-    let correctInLevel = 0;             // 当前等级已答对题数
-    let levelCleared = [false,false,false]; // 是否完成各等级（>=5 题）
-    let totalScore = 0;
+    let w1CurrentLevelIndex = 0;
+    let w1CorrectInLevel = 0;
+    let w1LevelCleared = [false,false,false];
+    let w1TotalScore = 0;
 
-    let currentNumber = 0;
-    let currentQuestion = null;
-    let answered = false;
+    let w1CurrentNumber = 0;
+    let w1CurrentQuestion = null;
+    let w1Answered = false;
 
-    // 挑战模式
-    let challengeUnlocked = false;
-    let challengeActive = false;
-    let challengeScore = 0;
-    let challengeTimeLeft = 0;
-    let challengeTimerId = null;
+    let w1ChallengeUnlocked = false;
+    let w1ChallengeActive = false;
+    let w1ChallengeScore = 0;
+    let w1ChallengeTimeLeft = 0;
+    let w1ChallengeTimerId = null;
 
-    // ===== DOM 引用 =====
-    const levelLabelEl = document.getElementById("level-label");
-    const levelProgressEl = document.getElementById("level-progress");
-    const totalScoreEl = document.getElementById("total-score");
-    const bigNumberEl = document.getElementById("big-number");
-    const digitGridEl = document.getElementById("digit-grid");
-    const questionTextEl = document.getElementById("question-text");
-    const optionsGridEl = document.getElementById("options-grid");
-    const feedbackEl = document.getElementById("feedback");
-    const towerTipEl = document.getElementById("tower-tip");
+    const w1LevelLabelEl = document.getElementById("w1-level-label");
+    const w1LevelProgressEl = document.getElementById("w1-level-progress");
+    const w1TotalScoreEl = document.getElementById("w1-total-score");
+    const w1BigNumberEl = document.getElementById("w1-big-number");
+    const w1DigitGridEl = document.getElementById("w1-digit-grid");
+    const w1QuestionTextEl = document.getElementById("w1-question-text");
+    const w1OptionsGridEl = document.getElementById("w1-options-grid");
+    const w1FeedbackEl = document.getElementById("w1-feedback");
+    const w1TowerTipEl = document.getElementById("w1-tower-tip");
 
-    const btnNext = document.getElementById("btn-next");
-    const btnRestart = document.getElementById("btn-restart");
-    const btnHelp = document.getElementById("btn-help");
+    const w1BtnNext = document.getElementById("w1-btn-next");
+    const w1BtnRestart = document.getElementById("w1-btn-restart");
+    const w1BtnHelp = document.getElementById("w1-btn-help");
 
-    const btnChallenge = document.getElementById("btn-challenge");
-    const challengeStatusEl = document.getElementById("challenge-status");
-    const leaderboardEl = document.getElementById("leaderboard");
+    const w1BtnChallenge = document.getElementById("w1-btn-challenge");
+    const w1ChallengeStatusEl = document.getElementById("w1-challenge-status");
+    const w1LeaderboardEl = document.getElementById("w1-leaderboard");
 
-    const diffButtons = [
-      document.getElementById("btn-level-0"),
-      document.getElementById("btn-level-1"),
-      document.getElementById("btn-level-2")
+    const w1DiffButtons = [
+      document.getElementById("w1-btn-level-0"),
+      document.getElementById("w1-btn-level-1"),
+      document.getElementById("w1-btn-level-2")
     ];
 
-    // ===== 工具函数 =====
-    function shuffle(arr) {
-      return arr.sort(() => Math.random() - 0.5);
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function placeIndexFromRight(placeName) {
-      return placeNames.indexOf(placeName); // 0=个,1=十,...
+    function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+    function placeIndexFromRight(name) {
+      return placeNames.indexOf(name);
     }
 
     function randomIntegerWithDigits(minDigits, maxDigits) {
-      const digits = Math.floor(Math.random() * (maxDigits - minDigits + 1)) + minDigits;
+      const digits = randInt(minDigits, maxDigits);
       const min = Math.pow(10, digits - 1);
       const max = Math.pow(10, digits) - 1;
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+      return randInt(min, max);
     }
 
     function splitNumber(num) {
       return String(num).split("").map(ch => parseInt(ch, 10));
     }
 
-    /**
-     * 渲染数位格子
-     * @param {number} num
-     * @param {string|null} highlightPlace 需要高亮的位名
-     * @param {boolean} showArrow 是否在个位下显示箭头（普通模式答错时）
-     */
-    function renderDigitGrid(num, highlightPlace, showArrow) {
+    function w1RenderDigitGrid(num, highlightPlace, showArrow) {
       const digits = splitNumber(num);
       const len = digits.length;
-      digitGridEl.innerHTML = "";
-
+      w1DigitGridEl.innerHTML = "";
       for (let i = 0; i < len; i++) {
         const col = document.createElement("div");
         col.className = "digit-col";
@@ -468,6 +605,7 @@
 
         const labelDiv = document.createElement("div");
         labelDiv.className = "digit-label";
+
         const indexFromRight = len - 1 - i;
         const placeName = placeNames[indexFromRight] || "";
         labelDiv.textContent = placeName;
@@ -479,91 +617,81 @@
         col.appendChild(valueDiv);
         col.appendChild(labelDiv);
 
-        // 只在“普通模式 & 做错题”时，个位下出现箭头
-        if (showArrow && !challengeActive && placeName === "个") {
+        if (showArrow && !w1ChallengeActive && placeName === "个") {
           const arrowDiv = document.createElement("div");
           arrowDiv.className = "digit-arrow";
           arrowDiv.textContent = "↑";
           col.appendChild(arrowDiv);
         }
 
-        digitGridEl.appendChild(col);
+        w1DigitGridEl.appendChild(col);
       }
     }
 
-    // ===== 出题逻辑 =====
-    function newQuestion() {
-      const level = levels[currentLevelIndex];
-      answered = false;
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
-      btnNext.disabled = true;
+    function w1NewQuestion() {
+      const level = w1Levels[w1CurrentLevelIndex];
+      w1Answered = false;
+      w1FeedbackEl.textContent = "";
+      w1FeedbackEl.className = "feedback";
+      w1BtnNext.disabled = true;
 
-      currentNumber = randomIntegerWithDigits(level.minDigits, level.maxDigits);
-      const digits = splitNumber(currentNumber);
-      bigNumberEl.textContent = currentNumber.toLocaleString("zh-CN");
+      w1CurrentNumber = randomIntegerWithDigits(level.minDigits, level.maxDigits);
+      const digits = splitNumber(w1CurrentNumber);
+      w1BigNumberEl.textContent = w1CurrentNumber.toLocaleString("zh-CN");
 
-      // 随机选一个存在的数位
       let placeName;
       while (true) {
-        placeName = level.placeRange[Math.floor(Math.random() * level.placeRange.length)];
-        const indexFromRight = placeIndexFromRight(placeName);
-        if (indexFromRight < digits.length) break;
+        placeName = level.placeRange[randInt(0, level.placeRange.length - 1)];
+        const idxRight = placeIndexFromRight(placeName);
+        if (idxRight < digits.length) break;
       }
       const correctDigit = digits[digits.length - 1 - placeIndexFromRight(placeName)];
+      w1CurrentQuestion = { placeName, correctDigit };
 
-      currentQuestion = { placeName, correctDigit };
-
-      questionTextEl.textContent =
+      w1QuestionTextEl.textContent =
         `题目：在这个数里，“${placeName}位”上的数字是多少？`;
 
-      renderDigitGrid(currentNumber, null, false);
+      w1RenderDigitGrid(w1CurrentNumber, null, false);
 
-      // 挑战模式下隐藏提示区
-      if (challengeActive) {
-        towerTipEl.style.display = "none";
+      if (w1ChallengeActive) {
+        w1TowerTipEl.style.display = "none";
       } else {
-        towerTipEl.style.display = "block";
-        towerTipEl.textContent = placeExplain;
+        w1TowerTipEl.style.display = "block";
+        w1TowerTipEl.textContent = placeExplain;
       }
 
-      buildOptions(correctDigit, digits);
+      w1BuildOptions(correctDigit, digits);
     }
 
-    function buildOptions(correctDigit, digits) {
-      optionsGridEl.innerHTML = "";
-      const options = new Set();
-      options.add(correctDigit);
-
-      for (let d of digits) {
+    function w1BuildOptions(correctDigit, digits) {
+      w1OptionsGridEl.innerHTML = "";
+      const options = new Set([correctDigit]);
+      for (const d of digits) {
         if (options.size >= 4) break;
         if (d !== correctDigit) options.add(d);
       }
       while (options.size < 4) {
-        const rand = Math.floor(Math.random() * 10);
-        options.add(rand);
+        options.add(randInt(0, 9));
       }
-
       shuffle(Array.from(options)).forEach(val => {
         const btn = document.createElement("button");
         btn.className = "num-btn";
         btn.textContent = val;
-        btn.addEventListener("click", () => handleAnswer(val, btn));
-        optionsGridEl.appendChild(btn);
+        btn.addEventListener("click", () => w1HandleAnswer(val, btn));
+        w1OptionsGridEl.appendChild(btn);
       });
     }
 
-    // ===== 答题处理 =====
-    function handleAnswer(val, btn) {
-      if (answered) return;
-      answered = true;
+    function w1HandleAnswer(val, btn) {
+      if (w1Answered) return;
+      w1Answered = true;
 
-      const { placeName, correctDigit } = currentQuestion;
-      const level = levels[currentLevelIndex];
+      const { placeName, correctDigit } = w1CurrentQuestion;
+      const level = w1Levels[w1CurrentLevelIndex];
 
-      optionsGridEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+      w1OptionsGridEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
 
-      const digits = splitNumber(currentNumber);
+      const digits = splitNumber(w1CurrentNumber);
       const len = digits.length;
       const idxRight = placeIndexFromRight(placeName);
       const idxLeft = len - 1 - idxRight;
@@ -573,285 +701,693 @@
 
       if (isCorrect) {
         btn.classList.add("correct");
-        feedbackEl.className = "feedback ok";
+        w1FeedbackEl.className = "feedback ok";
 
-        if (challengeActive) {
-          // 挑战模式：只记数量
-          challengeScore += 1;
-          feedbackEl.textContent =
-            `✅ 很好！你在挑战模式中又答对了一题，目前总共答对 ${challengeScore} 题。`;
-          challengeStatusEl.textContent =
-            `挑战模式进行中：剩余 ${challengeTimeLeft} 秒，已答对 ${challengeScore} 题。`;
+        if (w1ChallengeActive) {
+          w1ChallengeScore += 1;
+          w1FeedbackEl.textContent =
+            `✅ 很好！你在挑战模式中又答对了一题，目前总共答对 ${w1ChallengeScore} 题。`;
+          w1ChallengeStatusEl.textContent =
+            `挑战模式进行中：剩余 ${w1ChallengeTimeLeft} 秒，已答对 ${w1ChallengeScore} 题。`;
         } else {
-          feedbackEl.textContent =
+          w1FeedbackEl.textContent =
             `✅ 很棒！你找对了。“${placeName}位”上的数字就是 ${realDigit}。`;
 
-          correctInLevel += 1;
-          totalScore += 10;
-          totalScoreEl.textContent = totalScore;
-          levelProgressEl.textContent = `${correctInLevel} / 5`;
+          w1CorrectInLevel += 1;
+          w1TotalScore += 10;
+          w1TotalScoreEl.textContent = w1TotalScore;
+          w1LevelProgressEl.textContent = `${w1CorrectInLevel} / 5`;
 
-          // 本等级完成 5 题
-          if (correctInLevel >= 5 && !levelCleared[currentLevelIndex]) {
-            levelCleared[currentLevelIndex] = true;
-            updateDiffButtons();
-            feedbackEl.textContent +=
+          if (w1CorrectInLevel >= 5 && !w1LevelCleared[w1CurrentLevelIndex]) {
+            w1LevelCleared[w1CurrentLevelIndex] = true;
+            w1UpdateDiffButtons();
+            w1FeedbackEl.textContent +=
               ` 🎉 你已经完成“${level.name}”的 5 题挑战，可以继续练习，` +
-              `也可以点击上方切换到其它等级。`;
+              `也可以切换到其它等级。`;
 
-            // 三个等级都完成，解锁挑战模式
-            if (levelCleared.every(v => v)) {
-              unlockChallenge();
+            if (w1LevelCleared.every(v => v)) {
+              w1UnlockChallenge();
             }
           }
         }
-
-        // 正确时高亮数位（挑战模式也可以给这个视觉反馈）
-        renderDigitGrid(currentNumber, placeName, false);
+        w1RenderDigitGrid(w1CurrentNumber, placeName, false);
       } else {
         btn.classList.add("wrong");
-        feedbackEl.className = "feedback bad";
+        w1FeedbackEl.className = "feedback bad";
 
-        // 普通模式：错误 → 高亮正确位 + 个位箭头 + 详细解释
-        if (!challengeActive) {
-          renderDigitGrid(currentNumber, placeName, true);
+        if (!w1ChallengeActive) {
+          w1RenderDigitGrid(w1CurrentNumber, placeName, true);
 
           const needStrengthen =
             "你需要再加强“从右往左数数位”的能力：先找到个位，再往左数十、百、千、万……";
 
-          feedbackEl.textContent =
+          w1FeedbackEl.textContent =
             `❌ 这次选的是 ${val}，其实“${placeName}位”上的数字是 ${realDigit}。\n` +
             `想一想：从右边开始数，第 1 位是“个位”，第 2 位是“十位”，第 3 位是“百位”……\n` +
             `小建议：${needStrengthen}`;
 
-          towerTipEl.style.display = "block";
-          towerTipEl.textContent =
+          w1TowerTipEl.style.display = "block";
+          w1TowerTipEl.textContent =
             "从右往左数：\n" +
             "第 1 位是“个”，第 2 位是“十”，第 3 位是“百”，第 4 位是“千”，第 5 位是“万”……\n" +
             "箭头 ↑ 提醒你：要从“个位”开始往左数。";
         } else {
-          // 挑战模式下：只简单提示，不额外箭头/长篇教学
-          renderDigitGrid(currentNumber, null, false);
-          feedbackEl.textContent =
+          w1RenderDigitGrid(w1CurrentNumber, null, false);
+          w1FeedbackEl.textContent =
             `❌ 这题没对，继续加油！挑战模式下不会给太多提示，靠你的记忆和反应啦。`;
         }
       }
 
-      btnNext.disabled = false;
+      w1BtnNext.disabled = false;
 
-      if (challengeActive) {
-        // 挑战模式：自动下一题
-        setTimeout(() => {
-          newQuestion();
-        }, 350);
+      if (w1ChallengeActive) {
+        setTimeout(() => { w1NewQuestion(); }, 350);
       }
     }
 
-    // ===== UI 更新 =====
-    function updateLevelUI() {
-      const level = levels[currentLevelIndex];
-      levelLabelEl.textContent = level.name;
-      levelProgressEl.textContent = `${correctInLevel} / 5`;
-      if (!challengeActive) {
-        towerTipEl.style.display = "block";
-        towerTipEl.textContent = placeExplain;
+    function w1UpdateLevelUI() {
+      const level = w1Levels[w1CurrentLevelIndex];
+      w1LevelLabelEl.textContent = level.name;
+      w1LevelProgressEl.textContent = `${w1CorrectInLevel} / 5`;
+      if (!w1ChallengeActive) {
+        w1TowerTipEl.style.display = "block";
+        w1TowerTipEl.textContent = placeExplain;
       }
     }
 
-    function updateDiffButtons() {
-      diffButtons.forEach((btn, idx) => {
-        btn.classList.toggle("active", idx === currentLevelIndex);
-        if (levelCleared[idx]) {
-          btn.classList.add("cleared");
-        } else {
-          btn.classList.remove("cleared");
-        }
+    function w1UpdateDiffButtons() {
+      w1DiffButtons.forEach((btn, idx) => {
+        btn.classList.toggle("active", idx === w1CurrentLevelIndex);
+        if (w1LevelCleared[idx]) btn.classList.add("cleared");
+        else btn.classList.remove("cleared");
       });
     }
 
-    diffButtons.forEach((btn, idx) => {
+    w1DiffButtons.forEach((btn, idx) => {
       btn.addEventListener("click", () => {
-        if (challengeActive) return; // 挑战中不允许切换等级
-        currentLevelIndex = idx;
-        correctInLevel = 0;
-        updateDiffButtons();
-        updateLevelUI();
-        feedbackEl.textContent = "";
-        feedbackEl.className = "feedback";
-        newQuestion();
+        if (w1ChallengeActive) return;
+        w1CurrentLevelIndex = idx;
+        w1CorrectInLevel = 0;
+        w1UpdateDiffButtons();
+        w1UpdateLevelUI();
+        w1FeedbackEl.textContent = "";
+        w1FeedbackEl.className = "feedback";
+        w1NewQuestion();
       });
     });
 
-    btnNext.addEventListener("click", () => {
-      if (challengeActive) return;
-      newQuestion();
+    w1BtnNext.addEventListener("click", () => {
+      if (w1ChallengeActive) return;
+      w1NewQuestion();
     });
 
-    btnRestart.addEventListener("click", () => {
-      if (challengeActive) return;
-      correctInLevel = 0;
-      updateLevelUI();
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
-      newQuestion();
+    w1BtnRestart.addEventListener("click", () => {
+      if (w1ChallengeActive) return;
+      w1CorrectInLevel = 0;
+      w1UpdateLevelUI();
+      w1FeedbackEl.textContent = "";
+      w1FeedbackEl.className = "feedback";
+      w1NewQuestion();
     });
 
-    btnHelp.addEventListener("click", () => {
-      if (challengeActive) return;
-      const level = levels[currentLevelIndex];
-      feedbackEl.className = "feedback";
-      feedbackEl.textContent =
+    w1BtnHelp.addEventListener("click", () => {
+      if (w1ChallengeActive) return;
+      const level = w1Levels[w1CurrentLevelIndex];
+      w1FeedbackEl.className = "feedback";
+      w1FeedbackEl.textContent =
         `🔍 小提示：${level.tip}\n` +
         "从右往左读：第 1 位是“个位”，第 2 位是“十位”，第 3 位是“百位”，依次往左。";
     });
 
-    // ===== 排行榜 & 挑战模式 =====
-    function getLeaderboard() {
+    function w1GetLeaderboard() {
       try {
         const raw = localStorage.getItem("g4_world1_leaderboard");
         if (!raw) return [];
         const parsed = JSON.parse(raw);
         return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
+      } catch { return []; }
     }
 
-    function saveLeaderboard(list) {
-      try {
-        localStorage.setItem("g4_world1_leaderboard", JSON.stringify(list));
-      } catch {}
+    function w1SaveLeaderboard(list) {
+      try { localStorage.setItem("g4_world1_leaderboard", JSON.stringify(list)); } catch {}
     }
 
-    function renderLeaderboard() {
-      const list = getLeaderboard();
+    function w1RenderLeaderboard() {
+      const list = w1GetLeaderboard();
       if (!list.length) {
-        leaderboardEl.textContent = "挑战排行榜：还没有记录，快来成为第一个吧！";
+        w1LeaderboardEl.textContent = "挑战排行榜：还没有记录，快来成为第一个吧！";
         return;
       }
       let html = "<strong>挑战排行榜（60 秒内答对题数）：</strong><br>";
       list.forEach((item, idx) => {
-        const date = new Date(item.time);
+        const d = new Date(item.time);
         const label =
-          `${date.getMonth()+1}/${date.getDate()} ` +
-          `${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
+          `${d.getMonth()+1}/${d.getDate()} ` +
+          `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
         html += `${idx+1}. ${item.score} 题（${label}）<br>`;
       });
-      leaderboardEl.innerHTML = html;
+      w1LeaderboardEl.innerHTML = html;
     }
 
-    function updateLeaderboard(score) {
-      let list = getLeaderboard();
+    function w1UpdateLeaderboard(score) {
+      let list = w1GetLeaderboard();
       list.push({ score, time: Date.now() });
-      list.sort((a,b) => {
-        if (b.score !== a.score) return b.score - a.score;
-        return a.time - b.time;
-      });
+      list.sort((a,b) => b.score !== a.score ? b.score - a.score : a.time - b.time);
       list = list.slice(0, 5);
-      saveLeaderboard(list);
-      renderLeaderboard();
+      w1SaveLeaderboard(list);
+      w1RenderLeaderboard();
     }
 
-    function unlockChallenge() {
-      if (challengeUnlocked) return;
-      challengeUnlocked = true;
-      try {
-        localStorage.setItem("g4_world1_challenge_unlocked", "1");
-      } catch {}
-      btnChallenge.disabled = false;
-      btnChallenge.textContent = "🔥 挑战模式：1 分钟速战（已解锁，点击开始）";
-      challengeStatusEl.textContent =
+    function w1UnlockChallenge() {
+      if (w1ChallengeUnlocked) return;
+      w1ChallengeUnlocked = true;
+      try { localStorage.setItem("g4_world1_challenge_unlocked", "1"); } catch {}
+      w1BtnChallenge.disabled = false;
+      w1BtnChallenge.textContent = "🔥 挑战模式：1 分钟速战（已解锁，点击开始）";
+      w1ChallengeStatusEl.textContent =
         "挑战模式已解锁：60 秒内尽量多做题！题目使用“困难等级”的大数哦。";
     }
 
-    function loadChallengeUnlock() {
+    function w1LoadChallengeUnlock() {
       try {
         const flag = localStorage.getItem("g4_world1_challenge_unlocked");
         if (flag === "1") {
-          challengeUnlocked = true;
-          btnChallenge.disabled = false;
-          btnChallenge.textContent = "🔥 挑战模式：1 分钟速战（已解锁，点击开始）";
-          challengeStatusEl.textContent =
+          w1ChallengeUnlocked = true;
+          w1BtnChallenge.disabled = false;
+          w1BtnChallenge.textContent = "🔥 挑战模式：1 分钟速战（已解锁，点击开始）";
+          w1ChallengeStatusEl.textContent =
             "挑战模式已解锁：60 秒内尽量多做题！题目使用“困难等级”的大数哦。";
         }
       } catch {}
     }
 
-    function startChallenge() {
-      if (!challengeUnlocked || challengeActive) return;
+    function w1StartChallenge() {
+      if (!w1ChallengeUnlocked || w1ChallengeActive) return;
+      w1ChallengeActive = true;
+      w1ChallengeScore = 0;
+      w1ChallengeTimeLeft = 60;
 
-      challengeActive = true;
-      challengeScore = 0;
-      challengeTimeLeft = 60;
+      w1CurrentLevelIndex = 2;
+      w1CorrectInLevel = 0;
+      w1UpdateDiffButtons();
 
-      // 使用“困难等级”出题
-      currentLevelIndex = 2;
-      correctInLevel = 0;
-      updateDiffButtons();
+      w1LevelLabelEl.textContent = "挑战模式：1 分钟速战";
+      w1LevelProgressEl.textContent = "-";
+      w1FeedbackEl.textContent = "";
+      w1FeedbackEl.className = "feedback";
 
-      levelLabelEl.textContent = "挑战模式：1 分钟速战";
-      levelProgressEl.textContent = "-";
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
+      w1BtnRestart.disabled = true;
+      w1BtnHelp.disabled = true;
+      w1BtnNext.disabled = true;
 
-      btnRestart.disabled = true;
-      btnHelp.disabled = true;
-      btnNext.disabled = true;
+      w1TowerTipEl.style.display = "none";
 
-      towerTipEl.style.display = "none"; // 挑战模式下不显示数字下方提示
+      w1ChallengeStatusEl.textContent =
+        `挑战模式进行中：剩余 ${w1ChallengeTimeLeft} 秒，已答对 0 题。`;
 
-      challengeStatusEl.textContent =
-        `挑战模式进行中：剩余 ${challengeTimeLeft} 秒，已答对 0 题。`;
-
-      if (challengeTimerId) clearInterval(challengeTimerId);
-      challengeTimerId = setInterval(() => {
-        challengeTimeLeft--;
-        if (challengeTimeLeft <= 0) {
-          endChallenge();
+      if (w1ChallengeTimerId) clearInterval(w1ChallengeTimerId);
+      w1ChallengeTimerId = setInterval(() => {
+        w1ChallengeTimeLeft--;
+        if (w1ChallengeTimeLeft <= 0) {
+          w1EndChallenge();
         } else {
-          challengeStatusEl.textContent =
-            `挑战模式进行中：剩余 ${challengeTimeLeft} 秒，已答对 ${challengeScore} 题。`;
+          w1ChallengeStatusEl.textContent =
+            `挑战模式进行中：剩余 ${w1ChallengeTimeLeft} 秒，已答对 ${w1ChallengeScore} 题。`;
         }
       }, 1000);
 
-      newQuestion();
+      w1NewQuestion();
     }
 
-    function endChallenge() {
-      if (!challengeActive) return;
-      challengeActive = false;
-      clearInterval(challengeTimerId);
-      challengeTimerId = null;
+    function w1EndChallenge() {
+      if (!w1ChallengeActive) return;
+      w1ChallengeActive = false;
+      clearInterval(w1ChallengeTimerId);
+      w1ChallengeTimerId = null;
 
-      challengeStatusEl.textContent =
-        `本轮结束：你在 60 秒内一共答对了 ${challengeScore} 题！可以再试一次挑战，或者回到普通模式继续练习。`;
+      w1ChallengeStatusEl.textContent =
+        `本轮结束：你在 60 秒内一共答对了 ${w1ChallengeScore} 题！可以再试一次挑战，或者回到普通模式继续练习。`;
 
-      btnRestart.disabled = false;
-      btnHelp.disabled = false;
-      btnNext.disabled = false;
+      w1BtnRestart.disabled = false;
+      w1BtnHelp.disabled = false;
+      w1BtnNext.disabled = false;
 
-      // 恢复到当前等级 UI（默认为困难等级）
-      currentLevelIndex = 2;
-      updateLevelUI();
+      w1CurrentLevelIndex = 2;
+      w1UpdateLevelUI();
 
-      updateLeaderboard(challengeScore);
+      w1UpdateLeaderboard(w1ChallengeScore);
     }
 
-    btnChallenge.addEventListener("click", () => {
-      if (!challengeUnlocked) return;
-      startChallenge();
+    w1BtnChallenge.addEventListener("click", () => {
+      if (!w1ChallengeUnlocked) return;
+      w1StartChallenge();
     });
 
-    // ===== 初始化 =====
-    function init() {
-      loadChallengeUnlock();
-      renderLeaderboard();
-      updateDiffButtons();
-      updateLevelUI();
-      newQuestion();
+    function w1Init() {
+      w1LoadChallengeUnlock();
+      w1RenderLeaderboard();
+      w1UpdateDiffButtons();
+      w1UpdateLevelUI();
+      w1NewQuestion();
     }
 
-    init();
+    /* ================== 世界二：升和毫升实验室 ================== */
+
+    const w2Levels = [
+      {
+        id: 1,
+        name: "Lv.1 简单 · 直接换算",
+        tip: "先记住：1 升 = 1000 毫升。本关主要是 L 和 mL 的简单换算。"
+      },
+      {
+        id: 2,
+        name: "Lv.2 中等 · 组合容量",
+        tip: "遇到“几升几毫升”，可以先把“几升”都变成毫升，再加上剩下的毫升。"
+      },
+      {
+        id: 3,
+        name: "Lv.3 困难 · 情景应用",
+        tip: "要仔细读题，看清楚问的是“总共多少毫升”还是“多少升多少毫升”。"
+      }
+    ];
+
+    let w2CurrentLevelIndex = 0;
+    let w2CorrectInLevel = 0;
+    let w2LevelCleared = [false,false,false];
+    let w2TotalScore = 0;
+
+    let w2CurrentQuestion = null;
+    let w2Answered = false;
+
+    let w2ChallengeUnlocked = false;
+    let w2ChallengeActive = false;
+    let w2ChallengeScore = 0;
+    let w2ChallengeTimeLeft = 0;
+    let w2ChallengeTimerId = null;
+
+    const w2LevelLabelEl = document.getElementById("w2-level-label");
+    const w2LevelProgressEl = document.getElementById("w2-level-progress");
+    const w2TotalScoreEl = document.getElementById("w2-total-score");
+    const w2QuestionTextEl = document.getElementById("w2-question-text");
+    const w2CapacityDisplayEl = document.getElementById("w2-capacity-display");
+    const w2CapacityTipEl = document.getElementById("w2-capacity-tip");
+    const w2OptionsGridEl = document.getElementById("w2-options-grid");
+    const w2FeedbackEl = document.getElementById("w2-feedback");
+    const w2BtnNext = document.getElementById("w2-btn-next");
+    const w2BtnRestart = document.getElementById("w2-btn-restart");
+    const w2BtnHelp = document.getElementById("w2-btn-help");
+    const w2BtnChallenge = document.getElementById("w2-btn-challenge");
+    const w2ChallengeStatusEl = document.getElementById("w2-challenge-status");
+    const w2LeaderboardEl = document.getElementById("w2-leaderboard");
+    const w2DiffButtons = [
+      document.getElementById("w2-btn-level-0"),
+      document.getElementById("w2-btn-level-1"),
+      document.getElementById("w2-btn-level-2")
+    ];
+
+    function w2UpdateLevelUI() {
+      const level = w2Levels[w2CurrentLevelIndex];
+      w2LevelLabelEl.textContent = level.name;
+      w2LevelProgressEl.textContent = `${w2CorrectInLevel} / 5`;
+      if (!w2ChallengeActive) {
+        w2CapacityTipEl.style.display = "flex";
+        w2CapacityTipEl.firstChild && (w2CapacityTipEl.firstChild.textContent = "提示：");
+      } else {
+        w2CapacityTipEl.style.display = "none";
+      }
+    }
+
+    function w2UpdateDiffButtons() {
+      w2DiffButtons.forEach((btn, idx) => {
+        btn.classList.toggle("active", idx === w2CurrentLevelIndex);
+        if (w2LevelCleared[idx]) btn.classList.add("cleared");
+        else btn.classList.remove("cleared");
+      });
+    }
+
+    w2DiffButtons.forEach((btn, idx) => {
+      btn.addEventListener("click", () => {
+        if (w2ChallengeActive) return;
+        w2CurrentLevelIndex = idx;
+        w2CorrectInLevel = 0;
+        w2UpdateDiffButtons();
+        w2UpdateLevelUI();
+        w2FeedbackEl.textContent = "";
+        w2FeedbackEl.className = "feedback";
+        w2NewQuestion();
+      });
+    });
+
+    function w2NewQuestion() {
+      const levelIdx = w2CurrentLevelIndex;
+      w2Answered = false;
+      w2FeedbackEl.textContent = "";
+      w2FeedbackEl.className = "feedback";
+      w2BtnNext.disabled = true;
+
+      let q = null;
+
+      if (levelIdx === 0) {
+        // 简单：L <-> mL 直接换算
+        const direction = Math.random() < 0.5 ? "L_TO_ML" : "ML_TO_L";
+        if (direction === "L_TO_ML") {
+          const L = randInt(1, 9);
+          const correct = L * 1000;
+          q = {
+            type: "L_TO_ML",
+            text: `把 ${L} 升换算成毫升是多少？`,
+            display: `${L} L = ？ mL`,
+            correct,
+            explain: `1 升 = 1000 毫升，所以 ${L} 升 = ${L} × 1000 = ${correct} 毫升。`
+          };
+        } else {
+          const k = randInt(1, 9);
+          const ml = k * 1000;
+          const correct = k;
+          q = {
+            type: "ML_TO_L",
+            text: `把 ${ml} 毫升换算成升是多少？`,
+            display: `${ml} mL = ？ L`,
+            correct,
+            explain: `1 升 = 1000 毫升，所以 ${ml} ÷ 1000 = ${correct} 升。`
+          };
+        }
+      } else if (levelIdx === 1) {
+        // 中等：组合容量 -> 总毫升
+        const L = randInt(1, 5);
+        const ml = randInt(100, 900);
+        const correct = L * 1000 + ml;
+        q = {
+          type: "LML_TO_ML",
+          text: `${L} 升 ${ml} 毫升一共是多少毫升？`,
+          display: `${L} L ${ml} mL = ？ mL`,
+          correct,
+          explain:
+            `${L} 升先变成毫升：${L} × 1000 = ${L * 1000} 毫升，再加上 ${ml} 毫升：` +
+            `${L * 1000} + ${ml} = ${correct} 毫升。`
+        };
+      } else {
+        // 困难：情景题
+        const bottles = randInt(2, 4);
+        const eachL = randInt(1, 3);
+        const extraMl = randInt(100, 900);
+        const totalMl = bottles * eachL * 1000 + extraMl;
+        const Lpart = Math.floor(totalMl / 1000);
+        const Mlpart = totalMl % 1000;
+        q = {
+          type: "SCENE",
+          text: `有 ${bottles} 瓶果汁，每瓶 ${eachL} 升，另外还有 ${extraMl} 毫升，一共有多少升多少毫升？`,
+          display: `总量 = ？ L ？ mL`,
+          correct: `${Lpart}L${Mlpart}mL`,
+          Lpart,
+          Mlpart,
+          explain:
+            `${bottles} 瓶 × 每瓶 ${eachL} 升 = ${bottles * eachL} 升 = ${bottles * eachL * 1000} 毫升，` +
+            `再加上 ${extraMl} 毫升：${bottles * eachL * 1000} + ${extraMl} = ${totalMl} 毫升。\n` +
+            `${totalMl} 毫升里面有多少个 1000？${Lpart} 个，就是 ${Lpart} 升，还剩 ${Mlpart} 毫升。`
+        };
+      }
+
+      w2CurrentQuestion = q;
+      w2QuestionTextEl.textContent = "题目：" + q.text;
+      w2CapacityDisplayEl.textContent = q.display;
+
+      if (w2ChallengeActive) {
+        w2CapacityTipEl.style.display = "none";
+      } else {
+        w2CapacityTipEl.style.display = "flex";
+      }
+
+      w2BuildOptions(q);
+    }
+
+    function w2BuildOptions(q) {
+      w2OptionsGridEl.innerHTML = "";
+      const options = new Set();
+
+      if (q.type === "SCENE") {
+        const correctStr = q.correct;
+        options.add(correctStr);
+
+        while (options.size < 4) {
+          let dL = q.Lpart + randInt(-1, 1);
+          if (dL < 0) dL = 0;
+          let dMl = q.Mlpart + randInt(-200, 200);
+          if (dMl < 0) dMl = 0;
+          const s = `${dL}L${dMl}mL`;
+          if (s !== correctStr) options.add(s);
+        }
+      } else {
+        const correct = q.correct;
+        options.add(correct);
+        while (options.size < 4) {
+          let delta = randInt(-2000, 2000);
+          if (delta === 0) continue;
+          const v = correct + delta;
+          if (v > 0) options.add(v);
+        }
+      }
+
+      shuffle(Array.from(options)).forEach(val => {
+        const btn = document.createElement("button");
+        btn.className = "num-btn";
+        btn.textContent = typeof val === "number" ? val : val;
+        btn.addEventListener("click", () => w2HandleAnswer(val, btn));
+        w2OptionsGridEl.appendChild(btn);
+      });
+    }
+
+    function w2HandleAnswer(choice, btn) {
+      if (w2Answered) return;
+      w2Answered = true;
+
+      w2OptionsGridEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+
+      const q = w2CurrentQuestion;
+      const isCorrect =
+        q.type === "SCENE" ? (choice === q.correct) : (choice === q.correct);
+
+      if (isCorrect) {
+        btn.classList.add("correct");
+        w2FeedbackEl.className = "feedback ok";
+
+        if (w2ChallengeActive) {
+          w2ChallengeScore += 1;
+          w2FeedbackEl.textContent =
+            `✅ 太棒了！你在挑战模式中又答对了一题，目前总共答对 ${w2ChallengeScore} 题。`;
+          w2ChallengeStatusEl.textContent =
+            `挑战模式进行中：剩余 ${w2ChallengeTimeLeft} 秒，已答对 ${w2ChallengeScore} 题。`;
+        } else {
+          w2FeedbackEl.textContent =
+            `✅ 回答正确！${q.explain}`;
+
+          w2CorrectInLevel += 1;
+          w2TotalScore += 10;
+          w2TotalScoreEl.textContent = w2TotalScore;
+          w2LevelProgressEl.textContent = `${w2CorrectInLevel} / 5`;
+
+          if (w2CorrectInLevel >= 5 && !w2LevelCleared[w2CurrentLevelIndex]) {
+            w2LevelCleared[w2CurrentLevelIndex] = true;
+            w2UpdateDiffButtons();
+            w2FeedbackEl.textContent +=
+              ` 🎉 你已经完成“${w2Levels[w2CurrentLevelIndex].name}”的 5 题挑战，可以继续练习或切换等级。`;
+
+            if (w2LevelCleared.every(v => v)) {
+              w2UnlockChallenge();
+            }
+          }
+        }
+      } else {
+        btn.classList.add("wrong");
+        w2FeedbackEl.className = "feedback bad";
+
+        if (!w2ChallengeActive) {
+          let wrongExplain = "";
+          if (q.type === "L_TO_ML") {
+            wrongExplain =
+              `❌ 这次换算不对。\n你需要记住：1 升 = 1000 毫升，所以要用“升 × 1000”的方法来算。`;
+          } else if (q.type === "ML_TO_L") {
+            wrongExplain =
+              `❌ 这次换算不对。\n你需要把毫升除以 1000，看看里面有几个“1000 毫升”，那就是多少升。`;
+          } else if (q.type === "LML_TO_ML") {
+            wrongExplain =
+              `❌ 这次没有把“升”全部先变成毫升。\n先算“几升 × 1000”，再加上后面的毫升，会更稳。`;
+          } else {
+            wrongExplain =
+              `❌ 这次没有看清楚题目想要“多少升多少毫升”。\n先把总毫升算出来，再拆成“多少升 + 剩下多少毫升”。`;
+          }
+          w2FeedbackEl.textContent = wrongExplain + "\n\n正确思路是：\n" + q.explain;
+        } else {
+          w2FeedbackEl.textContent =
+            `❌ 这题没对，挑战模式下不给详细提示，靠平时学到的方法再冲一题！`;
+        }
+      }
+
+      w2BtnNext.disabled = false;
+      if (w2ChallengeActive) {
+        setTimeout(() => { w2NewQuestion(); }, 350);
+      }
+    }
+
+    w2BtnNext.addEventListener("click", () => {
+      if (w2ChallengeActive) return;
+      w2NewQuestion();
+    });
+
+    w2BtnRestart.addEventListener("click", () => {
+      if (w2ChallengeActive) return;
+      w2CorrectInLevel = 0;
+      w2UpdateLevelUI();
+      w2FeedbackEl.textContent = "";
+      w2FeedbackEl.className = "feedback";
+      w2NewQuestion();
+    });
+
+    w2BtnHelp.addEventListener("click", () => {
+      if (w2ChallengeActive) return;
+      const level = w2Levels[w2CurrentLevelIndex];
+      w2FeedbackEl.className = "feedback";
+      w2FeedbackEl.textContent =
+        `🔍 小提示：${level.tip}\n记住一个核心：1 升 = 1000 毫升。`;
+    });
+
+    function w2GetLeaderboard() {
+      try {
+        const raw = localStorage.getItem("g4_world2_leaderboard");
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch { return []; }
+    }
+
+    function w2SaveLeaderboard(list) {
+      try { localStorage.setItem("g4_world2_leaderboard", JSON.stringify(list)); } catch {}
+    }
+
+    function w2RenderLeaderboard() {
+      const list = w2GetLeaderboard();
+      if (!list.length) {
+        w2LeaderboardEl.textContent = "挑战排行榜：还没有记录，快来成为第一个吧！";
+        return;
+      }
+      let html = "<strong>挑战排行榜（60 秒内答对题数）：</strong><br>";
+      list.forEach((item, idx) => {
+        const d = new Date(item.time);
+        const label =
+          `${d.getMonth()+1}/${d.getDate()} ` +
+          `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+        html += `${idx+1}. ${item.score} 题（${label}）<br>`;
+      });
+      w2LeaderboardEl.innerHTML = html;
+    }
+
+    function w2UpdateLeaderboard(score) {
+      let list = w2GetLeaderboard();
+      list.push({ score, time: Date.now() });
+      list.sort((a,b) => b.score !== a.score ? b.score - a.score : a.time - b.time);
+      list = list.slice(0, 5);
+      w2SaveLeaderboard(list);
+      w2RenderLeaderboard();
+    }
+
+    function w2UnlockChallenge() {
+      if (w2ChallengeUnlocked) return;
+      w2ChallengeUnlocked = true;
+      try { localStorage.setItem("g4_world2_challenge_unlocked", "1"); } catch {}
+      w2BtnChallenge.disabled = false;
+      w2BtnChallenge.textContent = "🔥 挑战模式：1 分钟容量速战（已解锁，点击开始）";
+      w2ChallengeStatusEl.textContent =
+        "挑战模式已解锁：60 秒内看你能做对多少道容量换算题！";
+    }
+
+    function w2LoadChallengeUnlock() {
+      try {
+        const flag = localStorage.getItem("g4_world2_challenge_unlocked");
+        if (flag === "1") {
+          w2ChallengeUnlocked = true;
+          w2BtnChallenge.disabled = false;
+          w2BtnChallenge.textContent = "🔥 挑战模式：1 分钟容量速战（已解锁，点击开始）";
+          w2ChallengeStatusEl.textContent =
+            "挑战模式已解锁：60 秒内看你能做对多少道容量换算题！";
+        }
+      } catch {}
+    }
+
+    function w2StartChallenge() {
+      if (!w2ChallengeUnlocked || w2ChallengeActive) return;
+      w2ChallengeActive = true;
+      w2ChallengeScore = 0;
+      w2ChallengeTimeLeft = 60;
+
+      w2CurrentLevelIndex = 2;
+      w2CorrectInLevel = 0;
+      w2UpdateDiffButtons();
+
+      w2LevelLabelEl.textContent = "挑战模式：1 分钟容量速战";
+      w2LevelProgressEl.textContent = "-";
+      w2FeedbackEl.textContent = "";
+      w2FeedbackEl.className = "feedback";
+
+      w2BtnRestart.disabled = true;
+      w2BtnHelp.disabled = true;
+      w2BtnNext.disabled = true;
+
+      w2CapacityTipEl.style.display = "none";
+
+      w2ChallengeStatusEl.textContent =
+        `挑战模式进行中：剩余 ${w2ChallengeTimeLeft} 秒，已答对 0 题。`;
+
+      if (w2ChallengeTimerId) clearInterval(w2ChallengeTimerId);
+      w2ChallengeTimerId = setInterval(() => {
+        w2ChallengeTimeLeft--;
+        if (w2ChallengeTimeLeft <= 0) {
+          w2EndChallenge();
+        } else {
+          w2ChallengeStatusEl.textContent =
+            `挑战模式进行中：剩余 ${w2ChallengeTimeLeft} 秒，已答对 ${w2ChallengeScore} 题。`;
+        }
+      }, 1000);
+
+      w2NewQuestion();
+    }
+
+    function w2EndChallenge() {
+      if (!w2ChallengeActive) return;
+      w2ChallengeActive = false;
+      clearInterval(w2ChallengeTimerId);
+      w2ChallengeTimerId = null;
+
+      w2ChallengeStatusEl.textContent =
+        `本轮结束：你在 60 秒内一共答对了 ${w2ChallengeScore} 题！可以再试一次挑战，或者回到普通模式继续练习。`;
+
+      w2BtnRestart.disabled = false;
+      w2BtnHelp.disabled = false;
+      w2BtnNext.disabled = false;
+
+      w2CurrentLevelIndex = 2;
+      w2UpdateLevelUI();
+
+      w2UpdateLeaderboard(w2ChallengeScore);
+    }
+
+    w2BtnChallenge.addEventListener("click", () => {
+      if (!w2ChallengeUnlocked) return;
+      w2StartChallenge();
+    });
+
+    function w2Init() {
+      w2LoadChallengeUnlock();
+      w2RenderLeaderboard();
+      w2UpdateDiffButtons();
+      w2UpdateLevelUI();
+      w2NewQuestion();
+    }
+
+    /* ============== 整体初始化 ============== */
+    (function mainInit() {
+      w1Init();
+      w2Init();
+    })();
   </script>
 </body>
 </html>
