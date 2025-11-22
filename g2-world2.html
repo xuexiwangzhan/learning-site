@@ -342,20 +342,25 @@
         </div>
         <div class="board">
           <div class="prompt" id="m2-prompt">题目：9 + 6</div>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
-            <div>
-              <div style="font-size:13px; color:#9ca3af;">左边的一堆</div>
-              <div id="m2-left" style="display:flex; flex-wrap:wrap; gap:4px; font-size:20px;"></div>
-            </div>
-            <div>
-              <div style="font-size:13px; color:#9ca3af;">右边的一堆</div>
-              <div id="m2-right" style="display:flex; flex-wrap:wrap; gap:4px; font-size:20px;"></div>
-            </div>
-          </div>
-          <div style="font-size:13px; color:#cbd5f5; margin-top:8px;">
-            提示：从右边拖（想象）一些小方块到左边，让左边“刚好变成 10”。
-          </div>
-        </div>
+          <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+  
+  <!-- 上方一堆 -->
+  <div style="text-align:center;">
+    <div style="font-size:13px; color:#9ca3af; margin-bottom:4px;">上面的一堆</div>
+    <div id="m2-left" style="display:flex; flex-wrap:wrap; gap:4px; font-size:24px; justify-content:center;"></div>
+  </div>
+
+  <!-- 中间提示箭头 -->
+  <div style="font-size:24px; color:#38bdf8;">⬇️</div>
+
+  <!-- 下方一堆 -->
+  <div style="text-align:center;">
+    <div style="font-size:13px; color:#9ca3af; margin-bottom:4px;">下面的一堆</div>
+    <div id="m2-right" style="display:flex; flex-wrap:wrap; gap:4px; font-size:24px; justify-content:center;"></div>
+  </div>
+
+</div>
+
         <div class="prompt">下面哪一句是对这道题的最好解释？</div>
         <div class="num-grid" id="m2-options"></div>
         <div class="feedback" id="m2-feedback"></div>
