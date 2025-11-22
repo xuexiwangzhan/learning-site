@@ -401,19 +401,34 @@
         </div>
       </section>
 
-      <!-- 玩法5：乘法阵列农场 -->
+            <!-- 玩法5：乘法阵列农场（两步：先选算式，再选结果） -->
       <section id="mode-5" class="game-section">
         <div class="top-bar">
           <div>玩法五：几行几列有多少个？</div>
           <div>得分：<span id="m5-score">0</span></div>
         </div>
+
         <div class="board">
-          <div class="prompt" id="m5-prompt">这里有 3 行，每行 4 个小动物，一共有多少个？</div>
+          <div class="prompt" id="m5-prompt">
+            这里有 3 行，每行 4 个小动物，一共有多少个？
+          </div>
           <div class="array-grid" id="m5-array"></div>
         </div>
-        <div class="prompt">请选择正确答案：</div>
-        <div class="num-grid" id="m5-options"></div>
+
+        <!-- 第一步：选算式 -->
+        <div class="prompt" id="m5-step1-label">
+          第一步：下面哪一句算式，最符合“有几行，每行有几个”？
+        </div>
+        <div class="num-grid" id="m5-exp-options"></div>
+
+        <!-- 第二步：选结果 -->
+        <div class="prompt" id="m5-step2-label" style="display:none;">
+          第二步：你选的这个算式，结果是多少？
+        </div>
+        <div class="num-grid" id="m5-num-options" style="display:none;"></div>
+
         <div class="feedback" id="m5-feedback"></div>
+
         <div class="controls">
           <button class="btn btn-ghost" id="m5-restart">🔁 换一题</button>
           <button class="btn btn-main" id="m5-next" disabled>下一题 ▶</button>
