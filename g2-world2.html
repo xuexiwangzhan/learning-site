@@ -400,35 +400,29 @@
           <button class="btn btn-main" id="m4-next" disabled>下一题 ▶</button>
         </div>
       </section>
-
             <!-- 玩法5：乘法阵列农场（两步：先选算式，再选结果） -->
       <section id="mode-5" class="game-section">
         <div class="top-bar">
           <div>玩法五：几行几列有多少个？</div>
           <div>得分：<span id="m5-score">0</span></div>
         </div>
-
         <div class="board">
           <div class="prompt" id="m5-prompt">
             这里有 3 行，每行 4 个小动物，一共有多少个？
           </div>
           <div class="array-grid" id="m5-array"></div>
         </div>
-
         <!-- 第一步：选算式 -->
         <div class="prompt" id="m5-step1-label">
           第一步：下面哪一句算式，最符合“有几行，每行有几个”？
         </div>
         <div class="num-grid" id="m5-exp-options"></div>
-
         <!-- 第二步：选结果 -->
         <div class="prompt" id="m5-step2-label" style="display:none;">
           第二步：你选的这个算式，结果是多少？
         </div>
         <div class="num-grid" id="m5-num-options" style="display:none;"></div>
-
         <div class="feedback" id="m5-feedback"></div>
-
         <div class="controls">
           <button class="btn btn-ghost" id="m5-restart">🔁 换一题</button>
           <button class="btn btn-main" id="m5-next" disabled>下一题 ▶</button>
@@ -832,12 +826,15 @@
       newQuestion();
     })();
 
-    // 玩法5：乘法阵列农场
+        // 玩法5：乘法阵列农场（先选算式，再选结果）
     (function() {
       const scoreEl = document.getElementById("m5-score");
       const promptEl = document.getElementById("m5-prompt");
       const arrayEl = document.getElementById("m5-array");
-      const optionsEl = document.getElementById("m5-options");
+      const expOptionsEl = document.getElementById("m5-exp-options");
+      const numOptionsEl = document.getElementById("m5-num-options");
+      const step1LabelEl = document.getElementById("m5-step1-label");
+      const step2LabelEl = document.getElementById("m5-step2-label");
       const feedbackEl = document.getElementById("m5-feedback");
       const nextBtn = document.getElementById("m5-next");
       const restartBtn = document.getElementById("m5-restart");
@@ -845,7 +842,7 @@
       const icons = ["🐤","🐑","🐄","🌽","🍓"];
       let rows = 3, cols = 4, answer = 12;
       let score = 0;
-      let answered = false;
+      let expChosenCorrect = false; // 第一步是否正确完成
 
       function renderArray() {
         arrayEl.innerHTML = "";
@@ -864,52 +861,125 @@
         }
       }
 
-      function buildOptions() {
-        optionsEl.innerHTML = "";
+      // 第一步：选算式
+      function buildExpOptions() {
+        expOptionsEl.innerHTML = "";
+        numOptionsEl.innerHTML = "";
+        expChosenCorrect = false;
+        step2LabelEl.style.display = "none";
+        numOptionsEl.style.display = "none";
+        nextBtn.disabled = true;
+
+        const correctExp = `${rows} × ${cols}`;
+        const wrong1 = `${cols} × ${rows}`;        // 常见混淆：顺序颠倒
+        const wrong2 = `${rows} + ${cols}`;
+        const wrong3 = `${cols} + ${cols}`;
+
+        const options = shuffle([
+          { text: correctExp, correct: true },
+          { text: wrong1, correct: false },
+          { text: wrong2, correct: false },
+          { text: wrong3, correct: false }
+        ]);
+
+        options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.className = "num-btn";
+          btn.style.fontSize = "14px";
+          btn.textContent = opt.text;
+          btn.addEventListener("click", () => handleExpClick(opt, btn));
+          expOptionsEl.appendChild(btn);
+        });
+      }
+
+      function handleExpClick(opt, btn) {
+        if (expChosenCorrect) return; // 已经选对了就不再处理
+
+        expOptionsEl.querySelectorAll(".num-btn").forEach(b => {
+          b.disabled = true;
+        });
+
+        if (opt.correct) {
+          btn.classList.add("correct");
+          feedbackEl.textContent = "✅ 很好！“行数在前，每行有几个在后”，所以要写成 行数 × 每行个数。";
+          feedbackEl.className = "feedback ok";
+          expChosenCorrect = true;
+
+          // 打开第二步：选结果
+          step2LabelEl.style.display = "block";
+          numOptionsEl.style.display = "grid";
+          buildNumOptions();
+        } else {
+          btn.classList.add("wrong");
+          feedbackEl.textContent =
+            `❌ 想一想：题目说“${rows} 行，每行 ${cols} 个”，所以前面的数应该表示“有几行”？`;
+          feedbackEl.className = "feedback bad";
+
+          // 允许重新选择：解除禁用，但保持这个是红色
+          setTimeout(() => {
+            expOptionsEl.querySelectorAll(".num-btn").forEach(b => {
+              if (!b.classList.contains("correct") && !b.classList.contains("wrong")) {
+                b.disabled = false;
+              } else if (b !== btn) {
+                b.disabled = false;
+              } else {
+                // 错的这一个也可以再点，只是颜色留着提示一下
+                b.disabled = false;
+              }
+            });
+          }, 400);
+        }
+      }
+
+      // 第二步：选结果
+      function buildNumOptions() {
+        numOptionsEl.innerHTML = "";
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
         const correct = answer;
-        const wrong1 = correct + (Math.random()<0.5 ? -2 : 2);
-        const wrong2 = correct + (Math.random()<0.5 ? -4 : 4);
+        const wrong1 = correct + (Math.random() < 0.5 ? -2 : 2);
+        const wrong2 = correct + (Math.random() < 0.5 ? -4 : 4);
         const arr = shuffle([correct, wrong1, wrong2]);
         arr.forEach(val => {
           const btn = document.createElement("button");
           btn.className = "num-btn";
           btn.textContent = val;
-          btn.addEventListener("click", () => handleAnswer(val, btn));
-          optionsEl.appendChild(btn);
+          btn.addEventListener("click", () => handleNumClick(val, btn));
+          numOptionsEl.appendChild(btn);
         });
       }
 
-      function newQuestion() {
-        answered = false;
-        feedbackEl.textContent = "";
-        feedbackEl.className = "feedback";
-        nextBtn.disabled = true;
-        optionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = false);
-
-        rows = Math.floor(Math.random()*4) + 2; // 2~5
-        cols = Math.floor(Math.random()*4) + 2; // 2~5
-        answer = rows * cols;
-        renderArray();
-        promptEl.textContent = `这里有 ${rows} 行，每行 ${cols} 个，一共有多少个？（其实就是 ${rows} × ${cols}）`;
-        buildOptions();
-      }
-
-      function handleAnswer(val, btn) {
-        if (answered) return;
-        answered = true;
-        optionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
+      function handleNumClick(val, btn) {
+        numOptionsEl.querySelectorAll(".num-btn").forEach(b => b.disabled = true);
         if (val === answer) {
           btn.classList.add("correct");
-          feedbackEl.textContent = `✅ 很棒！你已经感受到 ${rows} × ${cols} = ${answer} 啦。`;
-          feedbackEl.classList.add("ok");
+          feedbackEl.textContent =
+            `✅ 太棒了！你不仅写对了算式 ${rows} × ${cols}，还知道等于 ${answer}。`;
+          feedbackEl.className = "feedback ok";
           score += 10;
         } else {
           btn.classList.add("wrong");
-          feedbackEl.textContent = `❌ 再数一数每行有几个，总共有几行，然后做 ${rows} × ${cols}。`;
-          feedbackEl.classList.add("bad");
+          feedbackEl.textContent =
+            `❌ 再数一数：一共有 ${rows} 行，每行 ${cols} 个，一共就是 ${rows}×${cols}=${answer}。`;
+          feedbackEl.className = "feedback bad";
         }
         scoreEl.textContent = score;
         nextBtn.disabled = false;
+      }
+
+      function newQuestion() {
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        // 行列随机，2～5
+        rows = Math.floor(Math.random() * 4) + 2;
+        cols = Math.floor(Math.random() * 4) + 2;
+        answer = rows * cols;
+
+        promptEl.textContent =
+          `这里有 ${rows} 行，每行 ${cols} 个，一共有多少个？`;
+
+        renderArray();
+        buildExpOptions();
       }
 
       nextBtn.addEventListener("click", newQuestion);
@@ -921,7 +991,6 @@
 
       newQuestion();
     })();
-
     // 玩法6：乘法口诀配对
     (function() {
       const gridEl = document.getElementById("m6-grid");
