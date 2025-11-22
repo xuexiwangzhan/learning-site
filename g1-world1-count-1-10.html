@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>一年级数学 · 世界一：数的王国 · 第1关 数苹果</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at top, #0f172a, #020617 60%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 10px 40px;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+    a.back {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    a.back:hover {
+      text-decoration: underline;
+    }
+    h1 {
+      margin: 4px 0 4px;
+      font-size: 24px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+    .card {
+      background: rgba(15,23,42,0.96);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.9);
+      border: 1px solid #1f2937;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #9ca3af;
+    }
+    .stars {
+      letter-spacing: 2px;
+      color: #fbbf24;
+    }
+    .best-record {
+      font-size: 12px;
+      color: #a5b4fc;
+    }
+    .game-area {
+      margin-top: 10px;
+    }
+    .round-label {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+    .apples-board {
+      margin: 8px 0 14px;
+      min-height: 80px;
+      border-radius: 14px;
+      border: 1px solid #1f2937;
+      background: linear-gradient(to bottom, #020617, #020617);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 10px;
+      gap: 8px;
+      font-size: 34px;
+    }
+    .hint-text {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .num-btn {
+      border: 1px solid #1f2937;
+      border-radius: 999px;
+      padding: 8px 0;
+      font-size: 16px;
+      background: #020617;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .num-btn:hover {
+      background: #0b1120;
+      border-color: #38bdf8;
+    }
+    .num-btn.correct {
+      background: #16a34a;
+      border-color: #22c55e;
+      color: #e5fdf0;
+    }
+    .num-btn.wrong {
+      background: #7f1d1d;
+      border-color: #ef4444;
+      color: #fee2e2;
+    }
+    .feedback {
+      min-height: 22px;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .feedback.ok {
+      color: #4ade80;
+    }
+    .feedback.bad {
+      color: #fca5a5;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .btn-next {
+      background: #2563eb;
+      color: white;
+    }
+    .btn-next:disabled {
+      background: #1f2937;
+      color: #6b7280;
+      cursor: not-allowed;
+    }
+    .btn-restart {
+      background: transparent;
+      border: 1px solid #4b5563;
+      color: #9ca3af;
+    }
+    .summary {
+      margin-top: 14px;
+      padding: 10px;
+      border-radius: 12px;
+      background: #020617;
+      border: 1px solid #374151;
+      font-size: 14px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 如果以后有一年级数学总页面，可以改成指向那个页面 -->
+    <a href="math.html" class="back">⏪ 返回数学学习中心</a>
+
+    <h1>一年级数学 · 世界一：数的王国 · 第1关 数苹果</h1>
+    <div class="subtitle" id="subtitle">
+      规则：一共有 <b id="total-rounds"></b> 题，每题看看有多少个 🍎，选出正确的数字。做完会给星星评价。
+    </div>
+
+    <div class="card">
+      <div class="top-bar">
+        <div>当前回合：<span id="round">1</span>/<span id="round-max"></span></div>
+        <div>当前得分：<span id="score">0</span> 分</div>
+        <div class="best-record" id="best-record"></div>
+      </div>
+
+      <div class="game-area">
+        <div class="round-label" id="round-label">第 1 题：认真数一数，有多少个苹果？</div>
+        <div class="apples-board" id="apples-board">
+          <!-- 动态生成苹果 -->
+        </div>
+        <div class="hint-text">请点击下面的数字，告诉我有几个 🍎：</div>
+        <div class="num-grid" id="num-grid">
+          <!-- 1~10 按钮 -->
+        </div>
+        <div class="feedback" id="feedback"></div>
+
+        <div class="controls">
+          <button class="btn btn-restart" id="btn-restart">🔁 重新这一关</button>
+          <button class="btn btn-next" id="btn-next" disabled>下一题 ▶</button>
+        </div>
+
+        <div class="summary" id="summary"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 一些基础参数：题目数量、数字范围
+    const ROUNDS_MAX = 8; // 一关 8 题，时长大概 5 分钟
+    const MIN_NUM = 1;
+    const MAX_NUM = 10;
+
+    const roundEl = document.getElementById("round");
+    const roundMaxEl = document.getElementById("round-max");
+    const totalRoundsEl = document.getElementById("total-rounds");
+    const scoreEl = document.getElementById("score");
+    const applesBoardEl = document.getElementById("apples-board");
+    const numGridEl = document.getElementById("num-grid");
+    const feedbackEl = document.getElementById("feedback");
+    const btnNext = document.getElementById("btn-next");
+    const btnRestart = document.getElementById("btn-restart");
+    const summaryEl = document.getElementById("summary");
+    const bestRecordEl = document.getElementById("best-record");
+    const roundLabelEl = document.getElementById("round-label");
+
+    let currentRound = 1;
+    let currentNumber = 0;
+    let score = 0;
+    let answered = false;
+    let correctCount = 0;
+
+    const STORAGE_KEY = "g1_world1_level1_best";
+
+    function setupNumberButtons() {
+      for (let i = MIN_NUM; i <= MAX_NUM; i++) {
+        const btn = document.createElement("button");
+        btn.className = "num-btn";
+        btn.textContent = i;
+        btn.dataset.value = i;
+        btn.addEventListener("click", () => handleAnswer(i, btn));
+        numGridEl.appendChild(btn);
+      }
+    }
+
+    function resetButtonsState() {
+      const buttons = numGridEl.querySelectorAll(".num-btn");
+      buttons.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove("correct", "wrong");
+      });
+    }
+
+    function renderApples(n) {
+      applesBoardEl.innerHTML = "";
+      for (let i = 0; i < n; i++) {
+        const span = document.createElement("span");
+        span.textContent = "🍎";
+        applesBoardEl.appendChild(span);
+      }
+    }
+
+    function newRound() {
+      answered = false;
+      feedbackEl.textContent = "";
+      feedbackEl.className = "feedback";
+      resetButtonsState();
+      btnNext.disabled = true;
+      summaryEl.style.display = "none";
+      summaryEl.textContent = "";
+
+      currentNumber = Math.floor(Math.random() * (MAX_NUM - MIN_NUM + 1)) + MIN_NUM;
+      renderApples(currentNumber);
+      roundEl.textContent = currentRound;
+      roundMaxEl.textContent = ROUNDS_MAX;
+      totalRoundsEl.textContent = ROUNDS_MAX;
+      roundLabelEl.textContent = `第 ${currentRound} 题：认真数一数，有多少个苹果？`;
+    }
+
+    function handleAnswer(val, btn) {
+      if (answered) return;
+      answered = true;
+
+      const buttons = numGridEl.querySelectorAll(".num-btn");
+      buttons.forEach(b => b.disabled = true);
+
+      if (val === currentNumber) {
+        btn.classList.add("correct");
+        feedbackEl.textContent = "✅ 太棒了，数得很认真！";
+        feedbackEl.classList.add("ok");
+        score += 10;
+        correctCount += 1;
+      } else {
+        btn.classList.add("wrong");
+        feedbackEl.textContent = `❌ 再看看，还有机会哦。正确答案是：${currentNumber}。`;
+        feedbackEl.classList.add("bad");
+      }
+      scoreEl.textContent = score;
+      btnNext.disabled = false;
+    }
+
+    function calcStars() {
+      const fullScore = ROUNDS_MAX * 10;
+      const ratio = score / fullScore;
+      let stars = 1;
+      if (ratio >= 0.9) stars = 3;
+      else if (ratio >= 0.7) stars = 2;
+
+      return stars;
+    }
+
+    function updateBestRecord(stars) {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        let bestStars = 0;
+        if (raw) {
+          bestStars = JSON.parse(raw).stars || 0;
+        }
+        if (stars > bestStars) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            stars,
+            score,
+            time: new Date().toISOString()
+          }));
+          bestStars = stars;
+        }
+        if (bestStars > 0) {
+          bestRecordEl.textContent = `历史最高：${"★".repeat(bestStars)}${"☆".repeat(3 - bestStars)}`;
+        } else {
+          bestRecordEl.textContent = "";
+        }
+      } catch (e) {
+        // 忽略本地存储异常
+      }
+    }
+
+    function showSummary() {
+      const stars = calcStars();
+      const fullScore = ROUNDS_MAX * 10;
+
+      let comment = "";
+      if (stars === 3) {
+        comment = "太棒了！你已经是“数苹果小高手”啦，可以挑战下一关啦。";
+      } else if (stars === 2) {
+        comment = "很好！再多玩几次，你一定可以拿到 3 颗星。";
+      } else {
+        comment = "先别着急，慢慢数，多练几次就会更厉害。";
+      }
+
+      summaryEl.style.display = "block";
+      summaryEl.innerHTML = `
+        <div>本关完成 ✅</div>
+        <div style="margin-top:4px;">总得分：<b>${score}</b> 分 / ${fullScore} 分</div>
+        <div style="margin-top:4px;">答对题数：<b>${correctCount}</b> / ${ROUNDS_MAX}</div>
+        <div style="margin-top:4px;">星级：<span class="stars">${"★".repeat(stars)}${"☆".repeat(3 - stars)}</span></div>
+        <div style="margin-top:6px;">${comment}</div>
+      `;
+      updateBestRecord(stars);
+    }
+
+    btnNext.addEventListener("click", () => {
+      if (currentRound < ROUNDS_MAX) {
+        currentRound++;
+        newRound();
+      } else {
+        // 最后一题之后，再点下一题就显示总结
+        btnNext.disabled = true;
+        showSummary();
+      }
+    });
+
+    btnRestart.addEventListener("click", () => {
+      currentRound = 1;
+      score = 0;
+      correctCount = 0;
+      scoreEl.textContent = score;
+      newRound();
+    });
+
+    // 页面初始化：加载历史最高记录 + 建立按钮 + 第一题
+    (function init() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const r = JSON.parse(raw);
+          if (r.stars) {
+            bestRecordEl.textContent = `历史最高：${"★".repeat(r.stars)}${"☆".repeat(3 - r.stars)}`;
+          }
+        }
+      } catch (e) {}
+      setupNumberButtons();
+      newRound();
+    })();
+  </script>
+</body>
+</html>
