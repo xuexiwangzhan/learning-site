@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>一年级数学 · 世界一：数的王国 · 第1关 数苹果</title>
+  <title>一年级数学 · 世界一：数的王国（5合1小游戏）</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
@@ -19,10 +17,7 @@
       align-items: flex-start;
       padding: 20px 10px 40px;
     }
-    .container {
-      width: 100%;
-      max-width: 900px;
-    }
+    .container { width: 100%; max-width: 960px; }
     a.back {
       display: inline-block;
       margin-bottom: 8px;
@@ -30,18 +25,10 @@
       color: #38bdf8;
       text-decoration: none;
     }
-    a.back:hover {
-      text-decoration: underline;
-    }
-    h1 {
-      margin: 4px 0 4px;
-      font-size: 24px;
-    }
-    .subtitle {
-      font-size: 14px;
-      color: #9ca3af;
-      margin-bottom: 16px;
-    }
+    a.back:hover { text-decoration: underline; }
+    h1 { margin: 4px 0 4px; font-size: 24px; }
+    .subtitle { font-size: 14px; color: #9ca3af; margin-bottom: 16px; }
+
     .card {
       background: rgba(15,23,42,0.96);
       border-radius: 18px;
@@ -49,6 +36,43 @@
       box-shadow: 0 16px 40px rgba(15,23,42,0.9);
       border: 1px solid #1f2937;
     }
+
+    /* 模式选择条 */
+    .mode-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .mode-btn {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+    .mode-btn:hover {
+      background: #0b1120;
+      border-color: #38bdf8;
+    }
+    .mode-btn.active {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #e5f0ff;
+    }
+
+    .game-section {
+      display: none;
+      margin-top: 8px;
+    }
+    .game-section.active {
+      display: block;
+    }
+
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -59,45 +83,35 @@
       font-size: 14px;
       color: #9ca3af;
     }
-    .stars {
-      letter-spacing: 2px;
-      color: #fbbf24;
-    }
-    .best-record {
-      font-size: 12px;
-      color: #a5b4fc;
-    }
-    .game-area {
-      margin-top: 10px;
-    }
-    .round-label {
-      font-size: 14px;
-      color: #9ca3af;
-      margin-bottom: 4px;
-    }
-    .apples-board {
+
+    .board {
       margin: 8px 0 14px;
-      min-height: 80px;
       border-radius: 14px;
       border: 1px solid #1f2937;
       background: linear-gradient(to bottom, #020617, #020617);
+      padding: 10px;
+    }
+
+    .emoji-grid {
+      min-height: 80px;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
-      padding: 10px;
       gap: 8px;
       font-size: 34px;
     }
-    .hint-text {
+
+    .prompt {
       font-size: 15px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
+
     .num-grid {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .num-btn {
       border: 1px solid #1f2937;
@@ -123,23 +137,21 @@
       border-color: #ef4444;
       color: #fee2e2;
     }
+
     .feedback {
       min-height: 22px;
       font-size: 14px;
       margin-top: 4px;
     }
-    .feedback.ok {
-      color: #4ade80;
-    }
-    .feedback.bad {
-      color: #fca5a5;
-    }
+    .feedback.ok { color: #4ade80; }
+    .feedback.bad { color: #fca5a5; }
+
     .controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 10px;
       flex-wrap: wrap;
     }
     .btn {
@@ -150,254 +162,642 @@
       cursor: pointer;
       transition: all .15s ease;
     }
-    .btn-next {
+    .btn-main {
       background: #2563eb;
-      color: white;
+      color: #fff;
     }
-    .btn-next:disabled {
+    .btn-main:disabled {
       background: #1f2937;
       color: #6b7280;
       cursor: not-allowed;
     }
-    .btn-restart {
+    .btn-ghost {
       background: transparent;
       border: 1px solid #4b5563;
       color: #9ca3af;
     }
+
     .summary {
-      margin-top: 14px;
-      padding: 10px;
-      border-radius: 12px;
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
       background: #020617;
       border: 1px solid #374151;
       font-size: 14px;
-      display: none;
+    }
+
+    /* 玩法三：左右比较 */
+    .side-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .side {
+      flex: 1;
+      min-width: 140px;
+      border-radius: 12px;
+      border: 1px solid #1f2937;
+      padding: 6px 6px 10px;
+      background: #020617;
+    }
+    .side-title {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    /* 玩法四：装满篮子 */
+    .basket-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+    .basket {
+      min-height: 70px;
+      border-radius: 14px;
+      border: 1px dashed #4b5563;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      font-size: 32px;
+    }
+    .basket-info {
+      font-size: 14px;
+      color: #cbd5f5;
+    }
+
+    /* 玩法五：数字小路 */
+    .number-path-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap: 8px;
+    }
+    .path-btn {
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 16px;
+      padding: 8px 0;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .path-btn.done {
+      background: #16a34a;
+      border-color: #22c55e;
+      color: #e5fdf0;
+    }
+    .path-btn.wrong {
+      background: #7f1d1d;
+      border-color: #ef4444;
+      color: #fee2e2;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- 如果以后有一年级数学总页面，可以改成指向那个页面 -->
     <a href="math.html" class="back">⏪ 返回数学学习中心</a>
 
-    <h1>一年级数学 · 世界一：数的王国 · 第1关 数苹果</h1>
-    <div class="subtitle" id="subtitle">
-      规则：一共有 <b id="total-rounds"></b> 题，每题看看有多少个 🍎，选出正确的数字。做完会给星星评价。
+    <h1>一年级数学 · 世界一：数的王国</h1>
+    <div class="subtitle">
+      本世界一共有 <b>5 种玩法</b>：数一数、只数某一种、谁更多、装满篮子、数字小路。请选择一个玩法开始闯关吧！
     </div>
 
     <div class="card">
-      <div class="top-bar">
-        <div>当前回合：<span id="round">1</span>/<span id="round-max"></span></div>
-        <div>当前得分：<span id="score">0</span> 分</div>
-        <div class="best-record" id="best-record"></div>
+      <!-- 模式选择 -->
+      <div class="mode-bar">
+        <button class="mode-btn active" data-mode="1">玩法一：趣味数一数</button>
+        <button class="mode-btn" data-mode="2">玩法二：只数目标图案</button>
+        <button class="mode-btn" data-mode="3">玩法三：谁更多？</button>
+        <button class="mode-btn" data-mode="4">玩法四：装满篮子</button>
+        <button class="mode-btn" data-mode="5">玩法五：数字小路</button>
       </div>
 
-      <div class="game-area">
-        <div class="round-label" id="round-label">第 1 题：认真数一数，有多少个苹果？</div>
-        <div class="apples-board" id="apples-board">
-          <!-- 动态生成苹果 -->
+      <!-- 玩法一：数一数 -->
+      <section id="mode-1" class="game-section active">
+        <div class="top-bar">
+          <div>玩法一：认真数一数，有多少个相同的图案？</div>
+          <div>当前得分：<span id="m1-score">0</span></div>
         </div>
-        <div class="hint-text">请点击下面的数字，告诉我有几个 🍎：</div>
-        <div class="num-grid" id="num-grid">
-          <!-- 1~10 按钮 -->
+        <div class="board">
+          <div class="prompt" id="m1-prompt">看看下面的图案，一共有几个？</div>
+          <div class="emoji-grid" id="m1-grid"></div>
         </div>
-        <div class="feedback" id="feedback"></div>
-
+        <div class="prompt">请点击你数到的数字：</div>
+        <div class="num-grid" id="m1-num-grid"></div>
+        <div class="feedback" id="m1-feedback"></div>
         <div class="controls">
-          <button class="btn btn-restart" id="btn-restart">🔁 重新这一关</button>
-          <button class="btn btn-next" id="btn-next" disabled>下一题 ▶</button>
+          <button class="btn btn-ghost" id="m1-restart">🔁 换一题</button>
+          <button class="btn btn-main" id="m1-next" disabled>下一题 ▶</button>
         </div>
+      </section>
 
-        <div class="summary" id="summary"></div>
-      </div>
+      <!-- 玩法二：只数目标图案 -->
+      <section id="mode-2" class="game-section">
+        <div class="top-bar">
+          <div>玩法二：只数任务图案</div>
+          <div>当前得分：<span id="m2-score">0</span></div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m2-prompt">任务：只数出有多少个 🐶？</div>
+          <div class="emoji-grid" id="m2-grid"></div>
+        </div>
+        <div class="prompt">只数任务图案的数量，点击正确数字：</div>
+        <div class="num-grid" id="m2-num-grid"></div>
+        <div class="feedback" id="m2-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m2-restart">🔁 换一题</button>
+          <button class="btn btn-main" id="m2-next" disabled>下一题 ▶</button>
+        </div>
+      </section>
+
+      <!-- 玩法三：谁更多？ -->
+      <section id="mode-3" class="game-section">
+        <div class="top-bar">
+          <div>玩法三：谁的更“多”呢？</div>
+          <div>当前得分：<span id="m3-score">0</span></div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m3-prompt">哪一边的图案更多？点左边或右边。</div>
+          <div class="side-row">
+            <div class="side">
+              <div class="side-title">左边</div>
+              <div class="emoji-grid" id="m3-left"></div>
+            </div>
+            <div class="side">
+              <div class="side-title">右边</div>
+              <div class="emoji-grid" id="m3-right"></div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt">请选择你觉得“更多”的一边：</div>
+        <div style="display:flex; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+          <button class="btn btn-main" id="m3-choose-left">左边更多</button>
+          <button class="btn btn-main" id="m3-choose-right">右边更多</button>
+        </div>
+        <div class="feedback" id="m3-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m3-restart">🔁 换一题</button>
+          <button class="btn btn-main" id="m3-next" disabled>下一题 ▶</button>
+        </div>
+        <div class="summary" id="m3-summary" style="display:none;"></div>
+      </section>
+
+      <!-- 玩法四：装满篮子 -->
+      <section id="mode-4" class="game-section">
+        <div class="top-bar">
+          <div>玩法四：装满篮子</div>
+          <div>当前得分：<span id="m4-score">0</span></div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m4-prompt">让篮子里刚好装下 5 个图案。</div>
+          <div class="basket-box">
+            <div class="basket" id="m4-basket"></div>
+            <div class="basket-info" id="m4-info">现在篮子里有 0 个。</div>
+          </div>
+        </div>
+        <div class="prompt">点击按钮往篮子里放图案或拿走：</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+          <button class="btn btn-main" id="m4-add">➕ 放一个</button>
+          <button class="btn btn-ghost" id="m4-remove">➖ 拿走一个</button>
+          <button class="btn btn-main" id="m4-done">✅ 我觉得刚刚好</button>
+        </div>
+        <div class="feedback" id="m4-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m4-restart">🔁 换一题</button>
+          <span style="font-size:13px; color:#9ca3af;">提示：不要超过，也不要少一个，刚刚好最棒！</span>
+        </div>
+      </section>
+
+      <!-- 玩法五：数字小路 -->
+      <section id="mode-5" class="game-section">
+        <div class="top-bar">
+          <div>玩法五：数字小路（按顺序点数字）</div>
+          <div>目标：从 1 点到 10</div>
+        </div>
+        <div class="board">
+          <div class="prompt" id="m5-prompt">请按顺序点击数字：1，2，3……一直到 10。</div>
+          <div class="number-path-grid" id="m5-grid"></div>
+        </div>
+        <div class="feedback" id="m5-feedback"></div>
+        <div class="controls">
+          <button class="btn btn-ghost" id="m5-restart">🔁 重新开始</button>
+        </div>
+      </section>
     </div>
   </div>
 
   <script>
-    // 一些基础参数：题目数量、数字范围
-    const ROUNDS_MAX = 8; // 一关 8 题，时长大概 5 分钟
-    const MIN_NUM = 1;
-    const MAX_NUM = 10;
+    // 通用：模式切换
+    const modeButtons = document.querySelectorAll(".mode-btn");
+    const sections = document.querySelectorAll(".game-section");
 
-    const roundEl = document.getElementById("round");
-    const roundMaxEl = document.getElementById("round-max");
-    const totalRoundsEl = document.getElementById("total-rounds");
-    const scoreEl = document.getElementById("score");
-    const applesBoardEl = document.getElementById("apples-board");
-    const numGridEl = document.getElementById("num-grid");
-    const feedbackEl = document.getElementById("feedback");
-    const btnNext = document.getElementById("btn-next");
-    const btnRestart = document.getElementById("btn-restart");
-    const summaryEl = document.getElementById("summary");
-    const bestRecordEl = document.getElementById("best-record");
-    const roundLabelEl = document.getElementById("round-label");
-
-    let currentRound = 1;
-    let currentNumber = 0;
-    let score = 0;
-    let answered = false;
-    let correctCount = 0;
-
-    const STORAGE_KEY = "g1_world1_level1_best";
-
-    function setupNumberButtons() {
-      for (let i = MIN_NUM; i <= MAX_NUM; i++) {
-        const btn = document.createElement("button");
-        btn.className = "num-btn";
-        btn.textContent = i;
-        btn.dataset.value = i;
-        btn.addEventListener("click", () => handleAnswer(i, btn));
-        numGridEl.appendChild(btn);
-      }
-    }
-
-    function resetButtonsState() {
-      const buttons = numGridEl.querySelectorAll(".num-btn");
-      buttons.forEach(btn => {
-        btn.disabled = false;
-        btn.classList.remove("correct", "wrong");
+    function switchMode(mode) {
+      modeButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.mode === String(mode));
+      });
+      sections.forEach(sec => {
+        sec.classList.toggle("active", sec.id === "mode-" + mode);
       });
     }
 
-    function renderApples(n) {
-      applesBoardEl.innerHTML = "";
-      for (let i = 0; i < n; i++) {
-        const span = document.createElement("span");
-        span.textContent = "🍎";
-        applesBoardEl.appendChild(span);
-      }
-    }
+    modeButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        switchMode(btn.dataset.mode);
+      });
+    });
 
-    function newRound() {
-      answered = false;
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
-      resetButtonsState();
-      btnNext.disabled = true;
-      summaryEl.style.display = "none";
-      summaryEl.textContent = "";
+    // 通用表情集
+    const baseEmojis = ["🍎","🍓","🍌","🍇","🍒","🐶","🚗","⭐","🍭","⚽"];
 
-      currentNumber = Math.floor(Math.random() * (MAX_NUM - MIN_NUM + 1)) + MIN_NUM;
-      renderApples(currentNumber);
-      roundEl.textContent = currentRound;
-      roundMaxEl.textContent = ROUNDS_MAX;
-      totalRoundsEl.textContent = ROUNDS_MAX;
-      roundLabelEl.textContent = `第 ${currentRound} 题：认真数一数，有多少个苹果？`;
-    }
+    // 玩法一：数一数
+    (function() {
+      const scoreEl = document.getElementById("m1-score");
+      const gridEl = document.getElementById("m1-grid");
+      const numGridEl = document.getElementById("m1-num-grid");
+      const feedbackEl = document.getElementById("m1-feedback");
+      const nextBtn = document.getElementById("m1-next");
+      const restartBtn = document.getElementById("m1-restart");
 
-    function handleAnswer(val, btn) {
-      if (answered) return;
-      answered = true;
+      let answer = 0;
+      let score = 0;
+      let answered = false;
 
-      const buttons = numGridEl.querySelectorAll(".num-btn");
-      buttons.forEach(b => b.disabled = true);
-
-      if (val === currentNumber) {
-        btn.classList.add("correct");
-        feedbackEl.textContent = "✅ 太棒了，数得很认真！";
-        feedbackEl.classList.add("ok");
-        score += 10;
-        correctCount += 1;
-      } else {
-        btn.classList.add("wrong");
-        feedbackEl.textContent = `❌ 再看看，还有机会哦。正确答案是：${currentNumber}。`;
-        feedbackEl.classList.add("bad");
-      }
-      scoreEl.textContent = score;
-      btnNext.disabled = false;
-    }
-
-    function calcStars() {
-      const fullScore = ROUNDS_MAX * 10;
-      const ratio = score / fullScore;
-      let stars = 1;
-      if (ratio >= 0.9) stars = 3;
-      else if (ratio >= 0.7) stars = 2;
-
-      return stars;
-    }
-
-    function updateBestRecord(stars) {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        let bestStars = 0;
-        if (raw) {
-          bestStars = JSON.parse(raw).stars || 0;
+      function setupNumButtons() {
+        for (let i = 1; i <= 10; i++) {
+          const btn = document.createElement("button");
+          btn.className = "num-btn";
+          btn.textContent = i;
+          btn.addEventListener("click", () => handleAnswer(i, btn));
+          numGridEl.appendChild(btn);
         }
-        if (stars > bestStars) {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify({
-            stars,
-            score,
-            time: new Date().toISOString()
-          }));
-          bestStars = stars;
+      }
+
+      function newQuestion() {
+        answered = false;
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        nextBtn.disabled = true;
+        gridEl.innerHTML = "";
+        const num = Math.floor(Math.random() * 10) + 1;
+        const emoji = baseEmojis[Math.floor(Math.random() * baseEmojis.length)];
+        answer = num;
+        for (let i = 0; i < num; i++) {
+          const span = document.createElement("span");
+          span.textContent = emoji;
+          gridEl.appendChild(span);
         }
-        if (bestStars > 0) {
-          bestRecordEl.textContent = `历史最高：${"★".repeat(bestStars)}${"☆".repeat(3 - bestStars)}`;
+        resetButtons();
+      }
+
+      function resetButtons() {
+        const buttons = numGridEl.querySelectorAll(".num-btn");
+        buttons.forEach(btn => {
+          btn.disabled = false;
+          btn.classList.remove("correct","wrong");
+        });
+      }
+
+      function handleAnswer(val, btn) {
+        if (answered) return;
+        answered = true;
+        const buttons = numGridEl.querySelectorAll(".num-btn");
+        buttons.forEach(b => b.disabled = true);
+        if (val === answer) {
+          btn.classList.add("correct");
+          feedbackEl.textContent = "✅ 数得很认真，完全正确！";
+          feedbackEl.classList.add("ok");
+          score += 10;
         } else {
-          bestRecordEl.textContent = "";
+          btn.classList.add("wrong");
+          feedbackEl.textContent = `❌ 再数一数？这次的正确答案是：${answer}。`;
+          feedbackEl.classList.add("bad");
         }
-      } catch (e) {
-        // 忽略本地存储异常
-      }
-    }
-
-    function showSummary() {
-      const stars = calcStars();
-      const fullScore = ROUNDS_MAX * 10;
-
-      let comment = "";
-      if (stars === 3) {
-        comment = "太棒了！你已经是“数苹果小高手”啦，可以挑战下一关啦。";
-      } else if (stars === 2) {
-        comment = "很好！再多玩几次，你一定可以拿到 3 颗星。";
-      } else {
-        comment = "先别着急，慢慢数，多练几次就会更厉害。";
+        scoreEl.textContent = score;
+        nextBtn.disabled = false;
       }
 
-      summaryEl.style.display = "block";
-      summaryEl.innerHTML = `
-        <div>本关完成 ✅</div>
-        <div style="margin-top:4px;">总得分：<b>${score}</b> 分 / ${fullScore} 分</div>
-        <div style="margin-top:4px;">答对题数：<b>${correctCount}</b> / ${ROUNDS_MAX}</div>
-        <div style="margin-top:4px;">星级：<span class="stars">${"★".repeat(stars)}${"☆".repeat(3 - stars)}</span></div>
-        <div style="margin-top:6px;">${comment}</div>
-      `;
-      updateBestRecord(stars);
-    }
+      nextBtn.addEventListener("click", newQuestion);
+      restartBtn.addEventListener("click", () => {
+        score = 0;
+        scoreEl.textContent = score;
+        newQuestion();
+      });
 
-    btnNext.addEventListener("click", () => {
-      if (currentRound < ROUNDS_MAX) {
-        currentRound++;
-        newRound();
-      } else {
-        // 最后一题之后，再点下一题就显示总结
-        btnNext.disabled = true;
-        showSummary();
+      setupNumButtons();
+      newQuestion();
+    })();
+
+    // 玩法二：只数目标图案
+    (function() {
+      const scoreEl = document.getElementById("m2-score");
+      const gridEl = document.getElementById("m2-grid");
+      const numGridEl = document.getElementById("m2-num-grid");
+      const feedbackEl = document.getElementById("m2-feedback");
+      const nextBtn = document.getElementById("m2-next");
+      const restartBtn = document.getElementById("m2-restart");
+      const promptEl = document.getElementById("m2-prompt");
+
+      let answer = 0;
+      let targetEmoji = "🐶";
+      let score = 0;
+      let answered = false;
+
+      function setupNumButtons() {
+        for (let i = 1; i <= 10; i++) {
+          const btn = document.createElement("button");
+          btn.className = "num-btn";
+          btn.textContent = i;
+          btn.addEventListener("click", () => handleAnswer(i, btn));
+          numGridEl.appendChild(btn);
+        }
       }
-    });
 
-    btnRestart.addEventListener("click", () => {
-      currentRound = 1;
-      score = 0;
-      correctCount = 0;
-      scoreEl.textContent = score;
-      newRound();
-    });
+      function newQuestion() {
+        answered = false;
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        nextBtn.disabled = true;
+        gridEl.innerHTML = "";
+        // 选一个目标图案
+        targetEmoji = baseEmojis[Math.floor(Math.random() * baseEmojis.length)];
+        const total = Math.floor(Math.random() * 6) + 6; // 总数 6~11
+        let targetCount = Math.floor(Math.random() * 5) + 1; // 目标 1~5
+        if (targetCount > total) targetCount = Math.floor(total/2) || 1;
+        answer = targetCount;
+        const arr = [];
+        for (let i = 0; i < targetCount; i++) arr.push(targetEmoji);
+        while (arr.length < total) {
+          let e = baseEmojis[Math.floor(Math.random() * baseEmojis.length)];
+          if (e === targetEmoji) continue; // 避免目标数量被破坏
+          arr.push(e);
+        }
+        // 打乱
+        arr.sort(() => Math.random() - 0.5);
+        arr.forEach(e => {
+          const span = document.createElement("span");
+          span.textContent = e;
+          gridEl.appendChild(span);
+        });
+        promptEl.textContent = `任务：只数出有多少个 ${targetEmoji}？`;
+        resetButtons();
+      }
 
-    // 页面初始化：加载历史最高记录 + 建立按钮 + 第一题
-    (function init() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const r = JSON.parse(raw);
-          if (r.stars) {
-            bestRecordEl.textContent = `历史最高：${"★".repeat(r.stars)}${"☆".repeat(3 - r.stars)}`;
+      function resetButtons() {
+        const buttons = numGridEl.querySelectorAll(".num-btn");
+        buttons.forEach(btn => {
+          btn.disabled = false;
+          btn.classList.remove("correct","wrong");
+        });
+      }
+
+      function handleAnswer(val, btn) {
+        if (answered) return;
+        answered = true;
+        const buttons = numGridEl.querySelectorAll(".num-btn");
+        buttons.forEach(b => b.disabled = true);
+        if (val === answer) {
+          btn.classList.add("correct");
+          feedbackEl.textContent = "✅ 太棒了！你只数目标图案也这么准！";
+          feedbackEl.classList.add("ok");
+          score += 10;
+        } else {
+          btn.classList.add("wrong");
+          feedbackEl.textContent = `❌ 这次一共有 ${answer} 个 ${targetEmoji}，我们再来一题试试？`;
+          feedbackEl.classList.add("bad");
+        }
+        scoreEl.textContent = score;
+        nextBtn.disabled = false;
+      }
+
+      nextBtn.addEventListener("click", newQuestion);
+      restartBtn.addEventListener("click", () => {
+        score = 0;
+        scoreEl.textContent = score;
+        newQuestion();
+      });
+
+      setupNumButtons();
+      newQuestion();
+    })();
+
+    // 玩法三：谁更多？
+    (function() {
+      const scoreEl = document.getElementById("m3-score");
+      const leftEl = document.getElementById("m3-left");
+      const rightEl = document.getElementById("m3-right");
+      const feedbackEl = document.getElementById("m3-feedback");
+      const nextBtn = document.getElementById("m3-next");
+      const restartBtn = document.getElementById("m3-restart");
+      const summaryEl = document.getElementById("m3-summary");
+      const btnLeft = document.getElementById("m3-choose-left");
+      const btnRight = document.getElementById("m3-choose-right");
+      const promptEl = document.getElementById("m3-prompt");
+
+      let leftCount = 0;
+      let rightCount = 0;
+      let score = 0;
+      let answered = false;
+
+      function newQuestion() {
+        answered = false;
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        nextBtn.disabled = true;
+        summaryEl.style.display = "none";
+        leftEl.innerHTML = "";
+        rightEl.innerHTML = "";
+
+        const emoji = baseEmojis[Math.floor(Math.random() * baseEmojis.length)];
+        leftCount = Math.floor(Math.random() * 6) + 3;  // 3~8
+        rightCount = Math.floor(Math.random() * 6) + 3;
+        while (leftCount === rightCount) {
+          rightCount = Math.floor(Math.random() * 6) + 3;
+        }
+
+        for (let i = 0; i < leftCount; i++) {
+          const span = document.createElement("span");
+          span.textContent = emoji;
+          leftEl.appendChild(span);
+        }
+        for (let i = 0; i < rightCount; i++) {
+          const span = document.createElement("span");
+          span.textContent = emoji;
+          rightEl.appendChild(span);
+        }
+        promptEl.textContent = "哪一边的图案更多？点左边或右边。";
+        btnLeft.disabled = false;
+        btnRight.disabled = false;
+      }
+
+      function handleChoice(side) {
+        if (answered) return;
+        answered = true;
+        btnLeft.disabled = true;
+        btnRight.disabled = true;
+
+        const diff = Math.abs(leftCount - rightCount);
+        const correctSide = leftCount > rightCount ? "left" : "right";
+
+        if (side === correctSide) {
+          feedbackEl.textContent = `✅ 很棒！你看出来哪一边更多啦。多了 ${diff} 个。`;
+          feedbackEl.classList.add("ok");
+          score += 10;
+        } else {
+          const tip = leftCount > rightCount ? "左边" : "右边";
+          feedbackEl.textContent = `❌ 这次其实是 ${tip} 更多哦，一共多 ${diff} 个。`;
+          feedbackEl.classList.add("bad");
+        }
+        scoreEl.textContent = score;
+        nextBtn.disabled = false;
+
+        summaryEl.style.display = "block";
+        summaryEl.textContent = `左边：${leftCount} 个，右边：${rightCount} 个。`;
+      }
+
+      btnLeft.addEventListener("click", () => handleChoice("left"));
+      btnRight.addEventListener("click", () => handleChoice("right"));
+      nextBtn.addEventListener("click", newQuestion);
+      restartBtn.addEventListener("click", () => {
+        score = 0;
+        scoreEl.textContent = score;
+        newQuestion();
+      });
+
+      newQuestion();
+    })();
+
+    // 玩法四：装满篮子
+    (function() {
+      const scoreEl = document.getElementById("m4-score");
+      const basketEl = document.getElementById("m4-basket");
+      const infoEl = document.getElementById("m4-info");
+      const promptEl = document.getElementById("m4-prompt");
+      const feedbackEl = document.getElementById("m4-feedback");
+      const btnAdd = document.getElementById("m4-add");
+      const btnRemove = document.getElementById("m4-remove");
+      const btnDone = document.getElementById("m4-done");
+      const restartBtn = document.getElementById("m4-restart");
+
+      let target = 5;
+      let current = 0;
+      let emoji = "🍓";
+      let score = 0;
+
+      function renderBasket() {
+        basketEl.innerHTML = "";
+        for (let i = 0; i < current; i++) {
+          const span = document.createElement("span");
+          span.textContent = emoji;
+          basketEl.appendChild(span);
+        }
+        infoEl.textContent = `现在篮子里有 ${current} 个。`;
+      }
+
+      function newQuestion() {
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        target = Math.floor(Math.random() * 5) + 3; // 3~7
+        emoji = baseEmojis[Math.floor(Math.random() * baseEmojis.length)];
+        current = 0;
+        promptEl.textContent = `让篮子里刚好装下 ${target} 个 ${emoji}。`;
+        renderBasket();
+      }
+
+      btnAdd.addEventListener("click", () => {
+        if (current < 12) {
+          current++;
+          renderBasket();
+        }
+      });
+
+      btnRemove.addEventListener("click", () => {
+        if (current > 0) {
+          current--;
+          renderBasket();
+        }
+      });
+
+      btnDone.addEventListener("click", () => {
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        if (current === target) {
+          feedbackEl.textContent = "✅ 刚刚好！你对数量的感觉很棒！";
+          feedbackEl.classList.add("ok");
+          score += 10;
+        } else if (current > target) {
+          feedbackEl.textContent = `😅 有点多啦，多了 ${current - target} 个，再试一题吧。`;
+          feedbackEl.classList.add("bad");
+        } else {
+          feedbackEl.textContent = `🙂 还有点少，差 ${target - current} 个。下次一定可以装刚刚好。`;
+          feedbackEl.classList.add("bad");
+        }
+        scoreEl.textContent = score;
+      });
+
+      restartBtn.addEventListener("click", () => {
+        score = 0;
+        scoreEl.textContent = score;
+        newQuestion();
+      });
+
+      newQuestion();
+    })();
+
+    // 玩法五：数字小路
+    (function() {
+      const gridEl = document.getElementById("m5-grid");
+      const feedbackEl = document.getElementById("m5-feedback");
+      const promptEl = document.getElementById("m5-prompt");
+      const restartBtn = document.getElementById("m5-restart");
+
+      let next = 1;
+
+      function newGame() {
+        gridEl.innerHTML = "";
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        next = 1;
+        const nums = [];
+        for (let i = 1; i <= 10; i++) nums.push(i);
+        nums.sort(() => Math.random() - 0.5);
+        nums.forEach(n => {
+          const btn = document.createElement("button");
+          btn.className = "path-btn";
+          btn.textContent = n;
+          btn.addEventListener("click", () => handleClick(n, btn));
+          gridEl.appendChild(btn);
+        });
+        promptEl.textContent = "请按顺序点击数字：1，2，3……一直到 10。";
+      }
+
+      function handleClick(n, btn) {
+        if (n === next) {
+          btn.classList.add("done");
+          btn.disabled = true;
+          if (next === 10) {
+            feedbackEl.textContent = "🎉 太棒了！你已经按顺序走完数字小路！";
+            feedbackEl.classList.add("ok");
+          } else {
+            next++;
+            feedbackEl.textContent = `很好！下一个要找的数字是：${next}`;
+            feedbackEl.className = "feedback ok";
           }
+        } else {
+          feedbackEl.textContent = `这还不是要找的那个数字哦，现在要找的是：${next}`;
+          feedbackEl.className = "feedback bad";
+          btn.classList.add("wrong");
+          setTimeout(() => btn.classList.remove("wrong"), 300);
         }
-      } catch (e) {}
-      setupNumberButtons();
-      newRound();
+      }
+
+      restartBtn.addEventListener("click", newGame);
+      newGame();
     })();
   </script>
 </body>
