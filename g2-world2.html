@@ -497,7 +497,7 @@
           if (i === answer) span.classList.add("end");
           lineEl.appendChild(span);
         }
-        arrowEl.textContent = `从 ${a} 开始，向前跳 ${b} 格，就到了 ${answer}。`;
+        m1Tip.innerHTML = `从 ${start} 开始，向前跳 ${steps} 格，会到哪个数字呢？`;
       }
 
       function newQuestion() {
