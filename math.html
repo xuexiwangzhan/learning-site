@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>数学学习中心 | 学习网站</title>
+  <title>数学学习中心 ｜ 学习网站</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
@@ -15,262 +15,147 @@
 
     /* 左侧导航栏 */
     #sidebar {
-      width: 260px;
-      background: #111827;
-      color: white;
+      width: 240px;
+      background: #1e293b;
+      color: #e2e8f0;
       height: 100vh;
-      padding: 20px;
+      padding: 20px 16px;
       box-sizing: border-box;
-      overflow-y: auto;
       position: fixed;
       left: 0;
       top: 0;
+      overflow-y: auto;
     }
 
     #sidebar h2 {
-      margin-top: 0;
       font-size: 20px;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      color: #fff;
     }
 
-    #sidebar small {
-      color: #9ca3af;
-      display: block;
-      margin-bottom: 16px;
-      font-size: 12px;
+    .nav-section {
+      margin-bottom: 20px;
     }
 
-    #sidebar a {
-      color: #e5e7eb;
-      text-decoration: none;
-      display: block;
-      padding: 6px 0;
+    .nav-title {
       font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 6px;
     }
 
-    #sidebar a:hover {
-      color: #38bdf8;
-    }
-
-    #sidebar .section-title {
-      margin-top: 16px;
+    .nav-item {
+      display: block;
+      padding: 6px 4px;
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 14px;
+      border-radius: 6px;
       margin-bottom: 4px;
-      font-weight: bold;
-      color: #d1d5db;
-      font-size: 13px;
+    }
+
+    .nav-item:hover {
+      background: #334155;
     }
 
     /* 右侧内容区 */
     #content {
       margin-left: 260px;
-      flex: 1;
-      padding: 30px;
-      background: #f3f4f6;
-      min-height: 100vh;
-      box-sizing: border-box;
+      padding: 20px 30px;
+      flex-grow: 1;
     }
 
     h1 {
       margin-top: 0;
-      font-size: 28px;
     }
 
-    h2, h3 {
-      color: #111827;
+    .section {
+      margin-bottom: 40px;
     }
 
-    .card {
-      background: #ffffff;
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    .grade-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #1e293b;
     }
 
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 8px 0 4px;
+    .game-link {
+      margin: 8px 0 14px;
+      padding: 10px 12px;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 15px;
+      line-height: 1.6;
     }
 
-    .badge {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      font-size: 12px;
+    .game-link a {
+      color: #2563eb;
+      font-weight: bold;
+      text-decoration: none;
     }
-
-    .tag {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      margin-right: 8px;
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    ul {
-      padding-left: 20px;
-    }
-
-    .example-step {
-      margin: 4px 0;
-    }
-
-    .question-list li {
-      margin: 4px 0;
-    }
-
-    details {
-      margin-top: 10px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: #eff6ff;
-      font-size: 14px;
+    .game-link a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
+
 <body>
 
   <!-- 左侧导航 -->
-  <aside id="sidebar">
+  <div id="sidebar">
     <h2>数学学习中心</h2>
-    <small>小学 · 初中 · 高中 · 题目 · 讲解</small>
 
-    <div class="section-title">📍 页面导航</div>
-    <a href="index.html">返回首页</a>
-    <a href="#overview">数学总览</a>
-    <a href="#primary">小学数学</a>
-    <a href="#junior">初中数学</a>
-    <a href="#senior">高中数学</a>
+    <div class="nav-section">
+      <div class="nav-title">阶段导航</div>
+      <a href="#" class="nav-item">小学</a>
+      <a href="#" class="nav-item">初中</a>
+      <a href="#" class="nav-item">高中</a>
+    </div>
 
-    <div class="section-title">🎯 精讲示例</div>
-    <a href="#grade7-equation">初一 · 一元一次方程</a>
-  </aside>
+    <div class="nav-section">
+      <div class="nav-title">工具区</div>
+      <a href="#" class="nav-item">小测验</a>
+      <a href="#" class="nav-item">错题本</a>
+    </div>
 
-  <!-- 内容区 -->
-  <main id="content">
-    <section id="overview">
-      <h1>数学学习中心</h1>
-      <p>这里专门放数学相关的内容：从小学口算，到初中方程函数，再到高中的导数、数列和解析几何。后面你可以在本页不断增加新的章节和练习。</p>
-    </section>
+  </div>
 
-    <section class="card" id="primary">
-      <h2>🏫 小学数学</h2>
-      <p>目标：打好计算基础，培养数感和图形直观感。</p>
-      <div class="badge-row">
-        <span class="badge">一年级</span>
-        <span class="badge">二年级</span>
-        <span class="badge">三年级</span>
-        <span class="badge">四年级</span>
-        <span class="badge">五年级</span>
-        <span class="badge">六年级</span>
+  <!-- 右侧内容 -->
+  <div id="content">
+    <h1>欢迎来到数学学习中心</h1>
+    <p>请选择你的年级或想学习的内容，开始探索数学世界！</p>
+
+    <!-- 小学部分 -->
+    <div class="section">
+      <div class="grade-title">📘 小学数学</div>
+
+      <!-- ⭐ 已加入世界一（数的王国）第1关入口 -->
+      <div class="game-link">
+        🎮 一年级 · 世界一：数的王国  
+        <br />
+        👉 <a href="g1-world1-count-1-10.html">第1关：数苹果小游戏（点击开始）</a>
       </div>
-      <ul>
-        <li>四则运算（加减乘除）</li>
-        <li>应用题入门：和差、倍数、平均数</li>
-        <li>图形与周长、面积（长方形、正方形、三角形）</li>
-        <li>简单统计表和条形图</li>
-      </ul>
-    </section>
 
-    <section class="card" id="junior">
-      <h2>🏫 初中数学</h2>
-      <p>目标：夯实代数和几何基础，为中考打好根基。</p>
-      <div class="badge-row">
-        <span class="badge">七年级</span>
-        <span class="badge">八年级</span>
-        <span class="badge">九年级</span>
+      <!-- 未来的关卡可以继续往这里添加 -->
+      <div class="game-link">
+        更多一年级关卡（敬请期待）
       </div>
-      <ul>
-        <li>代数：一元一次方程、不等式、函数</li>
-        <li>几何：三角形、四边形、相似、勾股定理</li>
-        <li>统计与概率基础</li>
-      </ul>
-    </section>
 
-    <section class="card" id="senior">
-      <h2>🎓 高中数学</h2>
-      <p>目标：构建系统的数学知识网络，应对高考。</p>
-      <div class="badge-row">
-        <span class="badge">必修</span>
-        <span class="badge">选修</span>
-      </div>
-      <ul>
-        <li>函数与导数</li>
-        <li>数列、排列组合、概率统计</li>
-        <li>解析几何、立体几何</li>
-      </ul>
-    </section>
+    </div>
 
-    <!-- 精讲示例：初一一元一次方程 -->
-    <section class="card" id="grade7-equation">
-      <h2>📘 初一 · 一元一次方程</h2>
-      <p>
-        <span class="tag">核心概念</span>
-        <span class="tag">解题步骤</span>
-        <span class="tag">典型例题</span>
-      </p>
+    <!-- 初中数学 -->
+    <div class="section">
+      <div class="grade-title">📘 初中数学</div>
+      <p>内容建设中…</p>
+    </div>
 
-      <h3>1. 什么是一元一次方程？</h3>
-      <ul>
-        <li><b>一元</b>：只有一个未知数（通常用 x 表示）。</li>
-        <li><b>一次</b>：未知数的次数是 1（没有 x²、x³）。</li>
-        <li><b>方程</b>：等号左右两边是相等的式子。</li>
-      </ul>
-      <p>常见形式：</p>
-      <ul>
-        <li>ax + b = c</li>
-        <li>ax + b = cx + d</li>
-      </ul>
+    <!-- 高中数学 -->
+    <div class="section">
+      <div class="grade-title">📘 高中数学</div>
+      <p>内容建设中…</p>
+    </div>
 
-      <h3>2. 通用解题步骤</h3>
-      <p>遇到一元一次方程，可以按下面 4 步来：</p>
-      <div class="example-step">① 去括号、去分母。</div>
-      <div class="example-step">② 把含 x 的项移到一边，数字项移到另一边。</div>
-      <div class="example-step">③ 合并同类项。</div>
-      <div class="example-step">④ 两边同时除以 x 的系数，得到 x 的值。</div>
+  </div>
 
-      <h3>3. 典型例题</h3>
-      <p><b>例 1：</b>解方程：<code>3x − 5 = 16</code></p>
-      <ol>
-        <li>把 −5 移到右边：<br>3x = 16 + 5 = 21</li>
-        <li>两边同除以 3：<br>x = 21 ÷ 3 = 7</li>
-      </ol>
-      <p>答：x = 7。</p>
-
-      <p><b>例 2：</b>解方程：<code>5x − 4 = x + 12</code></p>
-      <ol>
-        <li>把含 x 的项移到左边：<br>5x − x = 12 + 4</li>
-        <li>化简：<br>4x = 16</li>
-        <li>两边同除以 4：<br>x = 4</li>
-      </ol>
-      <p>答：x = 4。</p>
-
-      <h3>4. 小练习（可以让孩子自己先做）</h3>
-      <ol class="question-list">
-        <li>2x + 3 = 11</li>
-        <li>4x + 6 = 2x + 16</li>
-        <li>7x − 5 = 3x + 15</li>
-      </ol>
-
-      <details>
-        <summary>👉 展开查看参考答案</summary>
-        <ul>
-          <li>第 1 题：2x + 3 = 11 → 2x = 8 → x = 4</li>
-          <li>第 2 题：4x + 6 = 2x + 16 → 2x = 10 → x = 5</li>
-          <li>第 3 题：7x − 5 = 3x + 15 → 4x = 20 → x = 5</li>
-        </ul>
-      </details>
-
-      <p style="font-size: 13px; color:#6b7280; margin-top:12px;">
-        后续你可以按这个结构继续添加：<br>
-        比如「分式方程」「二元一次方程组」「一次函数」等，每个知识点一个小节：<br>
-        <b>概念 → 解题步骤 → 典型例题 → 小练习。</b>
-      </p>
-    </section>
-  </main>
 </body>
 </html>
