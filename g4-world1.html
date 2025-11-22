@@ -3,103 +3,169 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>四年级数学 | 数字游戏</title>
+  <title>四年级数学学习平台</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      padding: 20px;
+      background-color: #f0f4f8;
+      color: #333;
       margin: 0;
-    }
-    .game-container {
-      max-width: 800px;
-      margin: 0 auto;
       padding: 20px;
-      background-color: white;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .section h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #2d87f0;
+    }
+    .btn {
+      background-color: #28a745;
+      color: white;
+      padding: 12px 20px;
+      margin: 10px 0;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #218838;
     }
     .feedback {
       font-size: 18px;
-      margin-top: 20px;
-      color: green;
+      margin-top: 15px;
+      color: #28a745;
     }
-    #level-select {
-      margin: 20px 0;
-      font-size: 18px;
+    .error {
+      color: #d9534f;
     }
-    .difficulty-buttons {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
-    .difficulty-buttons button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .difficulty-buttons button:hover {
-      background-color: #45a049;
-    }
-    #challenge-status {
-      font-size: 20px;
-      margin: 20px 0;
+    .game-container {
       display: none;
     }
-    #towerTip {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #f8f8f8;
-      border-radius: 5px;
-      border: 1px solid #ddd;
+    .game-container.active {
       display: block;
     }
-    #start-challenge {
-      background-color: #008CBA;
-    }
-    #start-challenge:hover {
-      background-color: #007B9F;
+    #challenge-status {
+      font-size: 18px;
+      margin-top: 15px;
+      color: #f39c12;
     }
   </style>
 </head>
 <body>
-  <div class="game-container">
-    <h2>四年级数学：数字游戏</h2>
 
-    <!-- 选择困难模式或中等模式 -->
-    <div id="level-select">
-      <h3>选择游戏难度：</h3>
-      <div class="difficulty-buttons">
-        <button id="easy-button">中等模式</button>
-        <button id="hard-button">困难模式</button>
+  <div class="container">
+    <h1>四年级数学学习平台</h1>
+
+    <!-- 游戏选择部分 -->
+    <div id="game-selection">
+      <div class="section">
+        <h2>选择学习模块</h2>
+        <button class="btn" onclick="startGame('unitConversion')">升和毫升</button>
+        <button class="btn" onclick="startGame('division')">两位数除以两位数</button>
+        <button class="btn" onclick="startGame('shapes')">观察物体</button>
+        <button class="btn" onclick="startGame('graph')">统计表和条形统计图</button>
+        <button class="btn" onclick="startGame('motion')">运动与身体变化</button>
+        <button class="btn" onclick="startGame('problemSolving')">解决问题的策略</button>
+        <button class="btn" onclick="startGame('probability')">可能性</button>
+        <button class="btn" onclick="startGame('operations')">整数四则混合运算</button>
+        <button class="btn" onclick="startGame('lines')">垂线与平行线</button>
       </div>
     </div>
 
-    <!-- 挑战模式选择 -->
+    <!-- 单位换算游戏 -->
+    <div class="game-container" id="unitConversion">
+      <h2>升和毫升 - 单位换算接力赛</h2>
+      <p>把下列数字转换为毫升：</p>
+      <input type="number" id="convertInput" placeholder="请输入升" />
+      <button class="btn" onclick="checkUnitConversion()">提交</button>
+      <p id="convertFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 两位数除法游戏 -->
+    <div class="game-container" id="division">
+      <h2>两、三位数除以两位数</h2>
+      <p>计算：<span id="divisionProblem"></span></p>
+      <input type="number" id="divisionInput" placeholder="请输入答案" />
+      <button class="btn" onclick="checkDivision()">提交</button>
+      <p id="divisionFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 观察物体游戏 -->
+    <div class="game-container" id="shapes">
+      <h2>观察物体</h2>
+      <p>请从以下物体中找出相同形状的物品：</p>
+      <button class="btn" onclick="checkShapes()">开始</button>
+      <p id="shapesFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 条形统计图游戏 -->
+    <div class="game-container" id="graph">
+      <h2>统计表和条形统计图</h2>
+      <p>根据统计表，选择正确的答案：</p>
+      <button class="btn" onclick="checkGraph()">答题</button>
+      <p id="graphFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 运动与身体变化 -->
+    <div class="game-container" id="motion">
+      <h2>运动与身体变化</h2>
+      <p>运动时，心跳会发生怎样的变化？</p>
+      <button class="btn" onclick="checkMotion()">开始运动</button>
+      <p id="motionFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 解决问题的策略 -->
+    <div class="game-container" id="problemSolving">
+      <h2>解决问题的策略</h2>
+      <p>选择正确的解题步骤：</p>
+      <button class="btn" onclick="checkProblemSolving()">提交答案</button>
+      <p id="problemSolvingFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 可能性 -->
+    <div class="game-container" id="probability">
+      <h2>可能性</h2>
+      <p>如果投掷一个公平硬币，哪个结果更可能？</p>
+      <button class="btn" onclick="checkProbability()">选择答案</button>
+      <p id="probabilityFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 整数四则混合运算 -->
+    <div class="game-container" id="operations">
+      <h2>整数四则混合运算</h2>
+      <p>计算：<span id="operationProblem"></span></p>
+      <input type="number" id="operationsInput" placeholder="请输入答案" />
+      <button class="btn" onclick="checkOperations()">提交</button>
+      <p id="operationsFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 垂线与平行线 -->
+    <div class="game-container" id="lines">
+      <h2>垂线与平行线</h2>
+      <p>画出一条平行线：</p>
+      <button class="btn" onclick="checkLines()">提交</button>
+      <p id="linesFeedback" class="feedback"></p>
+    </div>
+
+    <!-- 挑战模式 -->
     <div id="challenge-status">
       <p>挑战模式进行中：剩余 <span id="challenge-time">60</span> 秒，已答对 <span id="challenge-score">0</span> 题。</p>
-    </div>
-
-    <!-- 提示信息 -->
-    <div id="towerTip">
-      <p>提示：从右往左依次是：个、十、百、千、万...</p>
-    </div>
-
-    <!-- 游戏开始按钮 -->
-    <div id="start-challenge">
-      <button onclick="startChallenge()">开始挑战</button>
-    </div>
-
-    <!-- 游戏互动内容 -->
-    <div id="game-content">
-      <p id="question">8 + 6 = ?</p>
-      <input type="number" id="answer" placeholder="请输入答案" />
-      <button onclick="checkAnswer()">提交答案</button>
-      <div id="feedback" class="feedback"></div>
     </div>
   </div>
 
@@ -109,79 +175,136 @@
     let challengeActive = false;
     let challengeTimerId;
 
-    // 隐藏提示区域
-    const towerTipEl = document.getElementById('towerTip');
-    const challengeStatusEl = document.getElementById('challenge-status');
-    const challengeTimeEl = document.getElementById('challenge-time');
-    const challengeScoreEl = document.getElementById('challenge-score');
-    const feedbackEl = document.getElementById('feedback');
-    const gameContentEl = document.getElementById('game-content');
+    function startGame(gameId) {
+      document.getElementById('game-selection').style.display = 'none';
+      document.getElementById(gameId).classList.add('active');
+      resetFeedback();
+      if (gameId === 'unitConversion') {
+        startUnitConversion();
+      } else if (gameId === 'division') {
+        startDivisionGame();
+      } else if (gameId === 'shapes') {
+        startShapesGame();
+      } else if (gameId === 'graph') {
+        startGraphGame();
+      } else if (gameId === 'motion') {
+        startMotionGame();
+      } else if (gameId === 'problemSolving') {
+        startProblemSolving();
+      } else if (gameId === 'probability') {
+        startProbabilityGame();
+      } else if (gameId === 'operations') {
+        startOperationsGame();
+      } else if (gameId === 'lines') {
+        startLinesGame();
+      }
+    }
 
-    let gameLevel = 'easy'; // 默认中等模式
+    function resetFeedback() {
+      document.querySelectorAll('.feedback').forEach(fb => fb.textContent = '');
+    }
 
-    // 选择难度按钮
-    document.getElementById('easy-button').onclick = function() {
-      gameLevel = 'easy';
-      alert('你选择了中等模式');
-    };
+    function startUnitConversion() {
+      document.getElementById('convertInput').value = '';
+    }
 
-    document.getElementById('hard-button').onclick = function() {
-      gameLevel = 'hard';
-      alert('你选择了困难模式');
-    };
+    function checkUnitConversion() {
+      const input = document.getElementById('convertInput').value;
+      if (input == 1) {
+        document.getElementById('convertFeedback').textContent = '答对了！1升等于1000毫升';
+      } else {
+        document.getElementById('convertFeedback').textContent = '错了，再试试！';
+      }
+    }
 
-    // 开始挑战
+    function startDivisionGame() {
+      const problem = "324 ÷ 12";
+      document.getElementById('divisionProblem').textContent = problem;
+    }
+
+    function checkDivision() {
+      const input = document.getElementById('divisionInput').value;
+      if (input == 27) {
+        document.getElementById('divisionFeedback').textContent = '答对了！';
+      } else {
+        document.getElementById('divisionFeedback').textContent = '错了，再试试！';
+      }
+    }
+
+    function startShapesGame() {
+      document.getElementById('shapesFeedback').textContent = '你找对了吗？';
+    }
+
+    function checkShapes() {
+      document.getElementById('shapesFeedback').textContent = '完成！';
+    }
+
+    function startGraphGame() {
+      document.getElementById('graphFeedback').textContent = '请根据图表选择答案';
+    }
+
+    function checkGraph() {
+      document.getElementById('graphFeedback').textContent = '你做得很好！';
+    }
+
+    function startMotionGame() {
+      document.getElementById('motionFeedback').textContent = '运动时，你的心跳和呼吸会发生什么变化？';
+    }
+
+    function checkMotion() {
+      document.getElementById('motionFeedback').textContent = '心跳加速，呼吸急促！';
+    }
+
+    function startProblemSolving() {
+      document.getElementById('problemSolvingFeedback').textContent = '选择正确的解题策略';
+    }
+
+    function checkProblemSolving() {
+      document.getElementById('problemSolvingFeedback').textContent = '答对了！';
+    }
+
+    function startProbabilityGame() {
+      document.getElementById('probabilityFeedback').textContent = '投掷硬币，哪个结果可能性更大？';
+    }
+
+    function checkProbability() {
+      document.getElementById('probabilityFeedback').textContent = '正反两面是等概率的！';
+    }
+
+    function startOperationsGame() {
+      document.getElementById('operationProblem').textContent = '45 + 23';
+    }
+
+    function checkOperations() {
+      const input = document.getElementById('operationsInput').value;
+      if (input == 68) {
+        document.getElementById('operationsFeedback').textContent = '答对了！';
+      } else {
+        document.getElementById('operationsFeedback').textContent = '错了，再试试！';
+      }
+    }
+
+    function startLinesGame() {
+      document.getElementById('linesFeedback').textContent = '你画出了平行线吗？';
+    }
+
+    function checkLines() {
+      document.getElementById('linesFeedback').textContent = '平行线完成！';
+    }
+
+    // 定时器相关
     function startChallenge() {
-      if (challengeActive) return;
       challengeActive = true;
       challengeScore = 0;
       challengeTimeLeft = 60;
-
-      feedbackEl.textContent = '';
-      challengeStatusEl.style.display = 'block';
-      towerTipEl.style.display = 'none'; // 隐藏提示
-
-      // 更新挑战状态
-      challengeTimeEl.textContent = challengeTimeLeft;
-      challengeScoreEl.textContent = challengeScore;
-
-      challengeTimerId = setInterval(function() {
+      challengeTimerId = setInterval(() => {
         challengeTimeLeft--;
-        challengeTimeEl.textContent = challengeTimeLeft;
+        document.getElementById('challenge-time').textContent = challengeTimeLeft;
         if (challengeTimeLeft <= 0) {
-          endChallenge();
+          clearInterval(challengeTimerId);
+          alert('挑战结束！');
         }
       }, 1000);
-
-      newQuestion();
-    }
-
-    // 检查答案
-    function checkAnswer() {
-      const answer = document.getElementById('answer').value;
-      if (parseInt(answer) === 14) {
-        feedbackEl.textContent = '回答正确！';
-        challengeScore++;
-        challengeScoreEl.textContent = challengeScore;
-      } else {
-        feedbackEl.textContent = '回答错误！再试试！';
-      }
-      newQuestion();
-    }
-
-    // 提示新问题
-    function newQuestion() {
-      document.getElementById('answer').value = ''; // 清空答案框
-      document.getElementById('question').textContent = '8 + 6 = ?';
-    }
-
-    // 结束挑战
-    function endChallenge() {
-      challengeActive = false;
-      clearInterval(challengeTimerId);
-      challengeStatusEl.style.display = 'none';
-      alert(`挑战结束！你答对了 ${challengeScore} 题！`);
-      towerTipEl.style.display = 'block'; // 恢复提示
     }
   </script>
 </body>
