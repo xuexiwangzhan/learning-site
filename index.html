@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学习中心 | 小学到高中</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background: #f5f5f5;
+    }
+    /* 左侧导航栏 */
+    #sidebar {
+      width: 250px;
+      background: #2d3e50;
+      color: white;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    #sidebar h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    #sidebar a {
+      color: #bcdcff;
+      text-decoration: none;
+      display: block;
+      padding: 6px 0;
+    }
+
+    #sidebar a:hover {
+      color: white;
+    }
+
+    /* 内容区 */
+    #content {
+      flex: 1;
+      padding: 30px;
+      background: white;
+      overflow-y: auto;
+    }
+
+    h1, h2, h3 {
+      color: #333;
+    }
+
+    .card {
+      background: #fff;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 左侧导航栏 -->
+  <div id="sidebar">
+    <h2>学习中心</h2>
+    <a href="#math">数学 Math</a>
+    <a href="#physics">物理 Physics</a>
+    <a href="#chemistry">化学 Chemistry</a>
+    <hr />
+    <a href="#tools">学习工具区</a>
+  </div>
+
+  <!-- 右侧内容区 -->
+  <div id="content">
+    <h1>欢迎来到学习中心</h1>
+    <p>本网站包含小学到高中的数学、物理、化学系统学习内容。</p>
+
+    <div class="card" id="math">
+      <h2>📐 数学 Math</h2>
+      <ul>
+        <li>小学（1-6 年级）</li>
+        <li>初中（七年级 - 九年级）</li>
+        <li>高中（必修 & 选修）</li>
+      </ul>
+    </div>
+
+    <div class="card" id="physics">
+      <h2>🔭 物理 Physics</h2>
+      <ul>
+        <li>小学科学基础</li>
+        <li>初中物理（七到九年级）</li>
+        <li>高中物理（必修 & 选修）</li>
+      </ul>
+    </div>
+
+    <div class="card" id="chemistry">
+      <h2>🧪 化学 Chemistry</h2>
+      <ul>
+        <li>小学自然科学</li>
+        <li>初中化学（八下-九年级）</li>
+        <li>高中化学（必修 & 选修）</li>
+      </ul>
+    </div>
+
+    <div class="card" id="tools">
+      <h2>🧰 工具区</h2>
+      <ul>
+        <li>错题本</li>
+        <li>小测验中心</li>
+        <li>学习路线图</li>
+        <li>实验/课程视频</li>
+      </ul>
+    </div>
+
+  </div>
+
+</body>
+</html>
