@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>一年级数学 · 世界一：数数王国</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at top, #020617, #020617 40%, #000 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 10px 40px;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+    a.back {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    a.back:hover { text-decoration: underline; }
+
+    h1 {
+      margin: 4px 0;
+      font-size: 24px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: rgba(15,23,42,0.96);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.9);
+      border: 1px solid #1f2937;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      font-size: 12px;
+      color: #cbd5f5;
+    }
+    .badge-pill span.level {
+      font-weight: bold;
+      color: #facc15;
+    }
+
+    .difficulty-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      align-items: center;
+    }
+    .diff-label {
+      color: #9ca3af;
+    }
+    .diff-btn {
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #e5e7eb;
+      padding: 4px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .diff-btn.active {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #fff;
+    }
+    .diff-btn.cleared::after {
+      content: " ✔";
+      color: #4ade80;
+      font-size: 11px;
+    }
+
+    .challenge-zone {
+      margin-bottom: 12px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #020617;
+      border: 1px dashed #374151;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+    .challenge-zone button {
+      margin-bottom: 6px;
+    }
+    .challenge-status {
+      margin-bottom: 4px;
+    }
+    .leaderboard {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.4;
+    }
+
+    .board {
+      margin: 6px 0 12px;
+      border-radius: 14px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      padding: 14px;
+    }
+    .prompt {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .scene {
+      min-height: 80px;
+      border-radius: 10px;
+      border: 1px solid #111827;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* 小星星场景 */
+    .star-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 28px);
+      gap: 6px;
+      justify-content: center;
+    }
+    .star {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #fee2e2, #f97316);
+      box-shadow: 0 0 6px rgba(251,191,36,0.8);
+    }
+
+    /* 彩色小球场景 */
+    .ball-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .ball {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #111827;
+      box-shadow: 0 0 4px rgba(148,163,184,0.6);
+    }
+
+    /* 数轴场景 */
+    .number-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 4px 0;
+    }
+    .number-tick {
+      text-align: center;
+      flex: 1;
+      font-size: 12px;
+      color: #9ca3af;
+      position: relative;
+    }
+    .number-tick span {
+      display: inline-block;
+      min-width: 18px;
+      padding: 2px 0;
+      border-radius: 999px;
+    }
+    .number-tick.start span {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    .number-tick.target span {
+      background: #4ade80;
+      color: #022c22;
+    }
+    .number-line-base {
+      height: 1px;
+      background: #4b5563;
+      margin-top: 4px;
+    }
+
+    /* 十几的火车场景 */
+    .teen-train {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .ten-block, .one-block {
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      padding: 4px;
+    }
+    .ten-block-title, .one-block-title {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 2px;
+      text-align: center;
+    }
+    .ten-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 10px);
+      gap: 3px;
+      justify-content: center;
+    }
+    .ten-cell {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: #22c55e;
+    }
+    .ones-row {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+    .one-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 4px rgba(250,204,21,0.8);
+    }
+
+    .tip-text {
+      font-size: 13px;
+      color: #9ca3af;
+      white-space: pre-line;
+    }
+
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 8px 0;
+    }
+    .num-btn {
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 16px;
+      padding: 8px 0;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .num-btn:hover {
+      background: #0b1120;
+      border-color: #38bdf8;
+    }
+    .num-btn.correct {
+      background: #16a34a;
+      border-color: #22c55e;
+      color: #e5fdf0;
+    }
+    .num-btn.wrong {
+      background: #7f1d1d;
+      border-color: #ef4444;
+      color: #fee2e2;
+    }
+
+    .feedback {
+      min-height: 40px;
+      font-size: 14px;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .feedback.ok { color: #4ade80; }
+    .feedback.bad { color: #fecaca; }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .btn-main {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-main:disabled {
+      background: #1f2937;
+      color: #6b7280;
+      cursor: not-allowed;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid #4b5563;
+      color: #9ca3af;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 640px) {
+      .num-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 如果你有 math.html，就能返回；没有也没关系，只是点击会 404 -->
+    <a href="math.html" class="back">⏪ 返回数学学习中心</a>
+
+    <h1>一年级数学 · 世界一：数数王国</h1>
+    <div class="subtitle">
+      在数数王国里，孩子要学会：<br/>
+      ● 看图数一数：0～10 个物体<br/>
+      ● 分清“有几个”和“第几个”<br/>
+      ● 在数轴上往前跳几步<br/>
+      ● 理解“十几”是 1 个十再加几个一<br/>
+      三个等级循序渐进，全部通关后，会解锁 60 秒挑战模式。
+    </div>
+
+    <div class="card">
+      <div class="top-bar">
+        <div class="badge-pill">
+          当前模式：
+          <span class="level" id="level-label">Lv.1 简单 · 数一数 0～5</span>
+        </div>
+        <div class="badge-pill">
+          本等级进度：<span id="level-progress">0 / 5</span>
+        </div>
+        <div class="badge-pill">
+          总得分：<span id="total-score">0</span>
+        </div>
+      </div>
+
+      <!-- 难度选择 -->
+      <div class="difficulty-row">
+        <span class="diff-label">选择等级：</span>
+        <button class="diff-btn active" data-level="0" id="btn-level-0">简单</button>
+        <button class="diff-btn" data-level="1" id="btn-level-1">中等</button>
+        <button class="diff-btn" data-level="2" id="btn-level-2">困难</button>
+      </div>
+
+      <!-- 挑战模式 -->
+      <div class="challenge-zone">
+        <button class="btn btn-ghost" id="btn-challenge" disabled>
+          🔒 挑战模式：完成三个等级后解锁
+        </button>
+        <div class="challenge-status" id="challenge-status">
+          每个等级答对 5 题后，将解锁 60 秒挑战模式。
+        </div>
+        <div class="leaderboard" id="leaderboard">
+          挑战排行榜：还没有记录，等你来挑战！
+        </div>
+      </div>
+
+      <!-- 主游戏区域 -->
+      <div class="board">
+        <div class="prompt" id="question-text">题目加载中……</div>
+        <div class="scene" id="scene"></div>
+        <div class="tip-text" id="tip-text">
+          小提示：可以一边用手指点一边数，别跳过，也别重复数哦。
+        </div>
+      </div>
+
+      <div class="prompt">请选择你认为正确的答案：</div>
+      <div class="num-grid" id="options-grid"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="controls">
+        <button class="btn btn-ghost" id="btn-help">📚 看提示</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-ghost" id="btn-restart">🔁 重置本等级进度</button>
+          <button class="btn btn-main" id="btn-next" disabled>下一题 ▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ======= 状态变量 =======
+    const levels = [
+      {
+        id: 1,
+        name: "Lv.1 简单 · 数一数 0～5",
+        tip: "本等级主要练习 0～5 的数数和看图数一数。",
+      },
+      {
+        id: 2,
+        name: "Lv.2 中等 · 0～10 和第几个",
+        tip: "注意区分“有几个”和“第几个”：有几个是数总数，第几个是从左往右数的位置。",
+      },
+      {
+        id: 3,
+        name: "Lv.3 困难 · 十几和数轴跳一跳",
+        tip: "记住：十几 = 1 个十再加几个一；数轴上往前跳几步就相当于加几。",
+      }
+    ];
+
+    let currentLevelIndex = 0;   // 0,1,2
+    let correctInLevel = 0;
+    let levelCleared = [false, false, false];
+    let totalScore = 0;
+
+    let currentQuestion = null;  // { type, text, correct, options, explain }
+    let answered = false;
+
+    // 挑战模式
+    let challengeUnlocked = false;
+    let challengeActive = false;
+    let challengeScore = 0;
+    let challengeTimeLeft = 0;
+    let challengeTimerId = null;
+
+    // ======= DOM 引用 =======
+    const levelLabelEl = document.getElementById("level-label");
+    const levelProgressEl = document.getElementById("level-progress");
+    const totalScoreEl = document.getElementById("total-score");
+    const questionTextEl = document.getElementById("question-text");
+    const sceneEl = document.getElementById("scene");
+    const tipTextEl = document.getElementById("tip-text");
+    const optionsGridEl = document.getElementById("options-grid");
+    const feedbackEl = document.getElementById("feedback");
+
+    const btnHelp = document.getElementById("btn-help");
+    const btnRestart = document.getElementById("btn-restart");
+    const btnNext = document.getElementById("btn-next");
+
+    const diffButtons = [
+      document.getElementById("btn-level-0"),
+      document.getElementById("btn-level-1"),
+      document.getElementById("btn-level-2"),
+    ];
+
+    const btnChallenge = document.getElementById("btn-challenge");
+    const challengeStatusEl = document.getElementById("challenge-status");
+    const leaderboardEl = document.getElementById("leaderboard");
+
+    // ======= 工具函数 =======
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    // ======= 出题逻辑 =======
+    function newQuestion() {
+      answered = false;
+      feedbackEl.textContent = "";
+      feedbackEl.className = "feedback";
+      btnNext.disabled = true;
+      sceneEl.innerHTML = "";
+      optionsGridEl.innerHTML = "";
+
+      const lv = currentLevelIndex;
+
+      let q;
+      if (lv === 0) {
+        // 简单：以数星星为主（0～5），有时用 0～10
+        const types = ["count"];
+        const t = types[randInt(0, types.length - 1)];
+        if (t === "count") {
+          q = makeCountQuestion(lv);
+        }
+      } else if (lv === 1) {
+        // 中等：数一数 + 第几个 + 简单数轴
+        const types = ["count", "ordinal", "line"];
+        const t = types[randInt(0, types.length - 1)];
+        if (t === "count") q = makeCountQuestion(lv);
+        else if (t === "ordinal") q = makeOrdinalQuestion();
+        else q = makeNumberLineQuestion(lv);
+      } else {
+        // 困难：数一数 + 数轴 + 十几
+        const types = ["count", "line", "teen"];
+        const t = types[randInt(0, types.length - 1)];
+        if (t === "count") q = makeCountQuestion(lv);
+        else if (t === "line") q = makeNumberLineQuestion(lv);
+        else q = makeTeenQuestion();
+      }
+
+      currentQuestion = q;
+
+      questionTextEl.textContent = "题目：" + q.text;
+      renderScene(q);
+
+      // 挑战模式下不显示提示文字
+      if (challengeActive) {
+        tipTextEl.style.display = "none";
+      } else {
+        tipTextEl.style.display = "block";
+        tipTextEl.textContent = q.tipShort || levels[currentLevelIndex].tip;
+      }
+
+      buildOptions(q);
+    }
+
+    // —— 题型一：数一数小星星 ——
+    function makeCountQuestion(levelIndex) {
+      let n;
+      if (levelIndex === 0) {
+        n = randInt(0, 5);
+      } else if (levelIndex === 1) {
+        n = randInt(2, 10);
+      } else {
+        n = randInt(5, 12);
+      }
+
+      const text = "请数一数，这里一共有多少个小星星？";
+      const explain =
+        `你可以用手指从左到右，一个一个点着数：1、2、3……数到最后一个。\n` +
+        `数到的最后一个数就是一共有多少个。这里数出来是 ${n} 个。`;
+
+      return {
+        type: "count",
+        text,
+        correct: n,
+        explain,
+        count: n,
+        tipShort: "数的时候不要跳过，也不要一个星星数两次。",
+      };
+    }
+
+    // —— 题型二：第几个（彩色小球） ——
+    function makeOrdinalQuestion() {
+      const colors = [
+        { name: "红色", css: "#f97373" },
+        { name: "蓝色", css: "#38bdf8" },
+        { name: "绿色", css: "#4ade80" },
+        { name: "黄色", css: "#facc15" },
+        { name: "紫色", css: "#a855f7" },
+        { name: "橙色", css: "#fb923c" },
+      ];
+
+      const len = randInt(4, 7);
+      const balls = [];
+      for (let i = 0; i < len; i++) {
+        balls.push(colors[randInt(0, colors.length - 1)]);
+      }
+      const which = randInt(1, len);
+      const correctColor = balls[which - 1];
+
+      const text = `从左往右数，第 ${which} 个小球是什么颜色？`;
+      const explain =
+        `“第几个”一定要从左边第一个开始数：第 1 个、第 2 个、第 3 个……\n` +
+        `你数到第 ${which} 个时，看到的是 ${correctColor.name} 的小球，所以答案是“${correctColor.name}”。`;
+
+      return {
+        type: "ordinal",
+        text,
+        correct: correctColor.name,
+        explain,
+        balls,
+        which,
+        tipShort: "记得从左边第 1 个开始数，不要从中间开始数哦。",
+      };
+    }
+
+    // —— 题型三：数轴跳一跳 ——
+    function makeNumberLineQuestion(levelIndex) {
+      let start, steps, maxEnd;
+      if (levelIndex === 1) {
+        start = randInt(0, 5);
+        steps = randInt(1, 4);
+        maxEnd = 10;
+      } else {
+        start = randInt(0, 9);
+        steps = randInt(1, 5);
+        maxEnd = 15;
+      }
+      let end = start + steps;
+      if (end > maxEnd) {
+        end = maxEnd;
+        steps = end - start;
+      }
+      const text = `小青蛙在数轴上的 ${start} 这里，向右跳 ${steps} 格，会跳到几？`;
+      const explain =
+        `在数轴上向右跳 ${steps} 格，就相当于在 ${start} 的基础上加 ${steps}。\n` +
+        `${start} + ${steps} = ${end}，所以最后会停在 ${end}。`;
+
+      return {
+        type: "line",
+        text,
+        correct: end,
+        explain,
+        start,
+        steps,
+        max: maxEnd,
+        tipShort: "每跳一格，就是加 1；跳几格就是加几。",
+      };
+    }
+
+    // —— 题型四：十几（1 个十 + 几个一） ——
+    function makeTeenQuestion() {
+      const ones = randInt(1, 9);
+      const total = 10 + ones;
+      const text = `1 个“十”和 ${ones} 个“一”合起来是多少？`;
+      const explain =
+        `1 个“十”就是 10，再加上 ${ones} 个“一”：\n` +
+        `10 + ${ones} = ${total}。\n` +
+        `所以是 ${total}。这就是“十几”的意思：1 个十再加几个一。`;
+
+      return {
+        type: "teen",
+        text,
+        correct: total,
+        explain,
+        ones,
+        tipShort: "先想 1 个“十”就是 10，再把后面的“一”加上去。",
+      };
+    }
+
+    // ======= 场景渲染 =======
+    function renderScene(q) {
+      sceneEl.innerHTML = "";
+
+      if (q.type === "count") {
+        const grid = document.createElement("div");
+        grid.className = "star-grid";
+        for (let i = 0; i < q.count; i++) {
+          const star = document.createElement("div");
+          star.className = "star";
+          grid.appendChild(star);
+        }
+        sceneEl.appendChild(grid);
+        if (q.count === 0) {
+          const txt = document.createElement("div");
+          txt.style.textAlign = "center";
+          txt.style.fontSize = "13px";
+          txt.style.color = "#9ca3af";
+          txt.textContent = "这里一个星星也没有，这就是 0 个。";
+          sceneEl.appendChild(txt);
+        }
+      } else if (q.type === "ordinal") {
+        const row = document.createElement("div");
+        row.className = "ball-row";
+        q.balls.forEach((b, idx) => {
+          const ball = document.createElement("div");
+          ball.className = "ball";
+          ball.style.background = b.css;
+          ball.title = `第 ${idx + 1} 个：${b.name}`;
+          row.appendChild(ball);
+        });
+        sceneEl.appendChild(row);
+      } else if (q.type === "line") {
+        const line = document.createElement("div");
+        line.className = "number-line";
+        const max = Math.max(q.max, q.start + q.steps, 10);
+
+        for (let i = 0; i <= max; i++) {
+          const tick = document.createElement("div");
+          tick.className = "number-tick";
+          if (i === q.start) tick.classList.add("start");
+          const span = document.createElement("span");
+          span.textContent = i;
+          tick.appendChild(span);
+          line.appendChild(tick);
+        }
+        sceneEl.appendChild(line);
+
+        const base = document.createElement("div");
+        base.className = "number-line-base";
+        sceneEl.appendChild(base);
+      } else if (q.type === "teen") {
+        const wrap = document.createElement("div");
+        wrap.className = "teen-train";
+
+        const tenBlock = document.createElement("div");
+        tenBlock.className = "ten-block";
+        const tenTitle = document.createElement("div");
+        tenTitle.className = "ten-block-title";
+        tenTitle.textContent = "1 个十 (=10)";
+        tenBlock.appendChild(tenTitle);
+        const tenGrid = document.createElement("div");
+        tenGrid.className = "ten-grid";
+        for (let i = 0; i < 10; i++) {
+          const cell = document.createElement("div");
+          cell.className = "ten-cell";
+          tenGrid.appendChild(cell);
+        }
+        tenBlock.appendChild(tenGrid);
+
+        const oneBlock = document.createElement("div");
+        oneBlock.className = "one-block";
+        const oneTitle = document.createElement("div");
+        oneTitle.className = "one-block-title";
+        oneTitle.textContent = `${q.ones} 个一`;
+        oneBlock.appendChild(oneTitle);
+        const row = document.createElement("div");
+        row.className = "ones-row";
+        for (let i = 0; i < q.ones; i++) {
+          const dot = document.createElement("div");
+          dot.className = "one-dot";
+          row.appendChild(dot);
+        }
+        oneBlock.appendChild(row);
+
+        wrap.appendChild(tenBlock);
+        wrap.appendChild(oneBlock);
+
+        sceneEl.appendChild(wrap);
+      }
+    }
+
+    // ======= 选项构建 =======
+    function buildOptions(q) {
+      optionsGridEl.innerHTML = "";
+
+      let optionValues = new Set();
+      if (q.type === "ordinal") {
+        // 颜色选项
+        optionValues.add(q.correct);
+        const colorPool = ["红色","蓝色","绿色","黄色","紫色","橙色"];
+        while (optionValues.size < 4) {
+          const c = colorPool[randInt(0, colorPool.length - 1)];
+          optionValues.add(c);
+        }
+      } else {
+        // 数字选项
+        optionValues.add(q.correct);
+        while (optionValues.size < 4) {
+          let delta = randInt(-3, 3);
+          if (delta === 0) continue;
+          let candidate = q.correct + delta;
+          if (candidate < 0 || candidate > 30) continue;
+          optionValues.add(candidate);
+        }
+      }
+
+      shuffle(Array.from(optionValues)).forEach(val => {
+        const btn = document.createElement("button");
+        btn.className = "num-btn";
+
+        if (q.type === "ordinal") {
+          // 显示颜色名 + 小色块
+          btn.textContent = "";
+          const colorText = document.createElement("span");
+          colorText.textContent = val;
+          const colorDot = document.createElement("span");
+          colorDot.style.display = "inline-block";
+          colorDot.style.width = "14px";
+          colorDot.style.height = "14px";
+          colorDot.style.borderRadius = "50%";
+          colorDot.style.marginRight = "6px";
+          colorDot.style.border = "1px solid #111827";
+
+          const colorMap = {
+            "红色": "#f97373",
+            "蓝色": "#38bdf8",
+            "绿色": "#4ade80",
+            "黄色": "#facc15",
+            "紫色": "#a855f7",
+            "橙色": "#fb923c",
+          };
+          colorDot.style.background = colorMap[val] || "#e5e7eb";
+
+          btn.appendChild(colorDot);
+          btn.appendChild(colorText);
+        } else {
+          btn.textContent = val;
+        }
+
+        btn.addEventListener("click", () => handleAnswer(val, btn));
+        optionsGridEl.appendChild(btn);
+      });
+    }
+
+    // ======= 判题逻辑 =======
+    function handleAnswer(value, btn) {
+      if (answered) return;
+      answered = true;
+
+      const q = currentQuestion;
+      const isCorrect = value === q.correct;
+
+      optionsGridEl.querySelectorAll(".num-btn").forEach(b => (b.disabled = true));
+
+      if (isCorrect) {
+        btn.classList.add("correct");
+        feedbackEl.className = "feedback ok";
+        if (challengeActive) {
+          challengeScore += 1;
+          feedbackEl.textContent =
+            `✅ 太棒了！你在挑战模式中又答对了一题，目前总共答对 ${challengeScore} 题。`;
+          challengeStatusEl.textContent =
+            `挑战模式进行中：剩余 ${challengeTimeLeft} 秒，已答对 ${challengeScore} 题。`;
+        } else {
+          feedbackEl.textContent = `✅ 回答正确！\n` + q.explain;
+          correctInLevel += 1;
+          totalScore += 10;
+          totalScoreEl.textContent = totalScore;
+          levelProgressEl.textContent = `${correctInLevel} / 5`;
+
+          if (correctInLevel >= 5 && !levelCleared[currentLevelIndex]) {
+            levelCleared[currentLevelIndex] = true;
+            updateDiffButtons();
+            feedbackEl.textContent +=
+              `\n🎉 你已经完成“${levels[currentLevelIndex].name}”的 5 题挑战，可以继续练习或切换等级。`;
+            if (levelCleared.every(v => v)) {
+              unlockChallenge();
+            }
+          }
+        }
+      } else {
+        btn.classList.add("wrong");
+        feedbackEl.className = "feedback bad";
+        if (!challengeActive) {
+          let extra = "";
+          if (q.type === "count") {
+            extra = "可以重新用手指一个一个点着数，再想想。";
+          } else if (q.type === "ordinal") {
+            extra = "你可能数错第几个了，记得从左边第 1 个开始数。";
+          } else if (q.type === "line") {
+            extra = "每跳一格就是加 1，你可以在心里跟着数：加 1、加 2、加 3……";
+          } else if (q.type === "teen") {
+            extra = "先把 1 个十当成 10，再把几个一加上去，会更清楚。";
+          }
+          feedbackEl.textContent =
+            `❌ 这次没有做对，没关系，我们看看正确想法：\n` +
+            q.explain + `\n\n小建议：${extra}`;
+        } else {
+          feedbackEl.textContent =
+            `❌ 这题没对，挑战模式下不展开解释，靠平时练习的本领继续冲下一题！`;
+        }
+      }
+
+      btnNext.disabled = false;
+
+      if (challengeActive) {
+        setTimeout(() => {
+          newQuestion();
+        }, 350);
+      }
+    }
+
+    // ======= 难度 UI =======
+    function updateLevelUI() {
+      const lv = levels[currentLevelIndex];
+      levelLabelEl.textContent = lv.name;
+      levelProgressEl.textContent = `${correctInLevel} / 5`;
+      if (!challengeActive) {
+        tipTextEl.style.display = "block";
+        tipTextEl.textContent = lv.tip;
+      }
+    }
+
+    function updateDiffButtons() {
+      diffButtons.forEach((btn, idx) => {
+        btn.classList.toggle("active", idx === currentLevelIndex);
+        if (levelCleared[idx]) btn.classList.add("cleared");
+        else btn.classList.remove("cleared");
+      });
+    }
+
+    diffButtons.forEach((btn, idx) => {
+      btn.addEventListener("click", () => {
+        if (challengeActive) return;
+        currentLevelIndex = idx;
+        correctInLevel = 0;
+        updateDiffButtons();
+        updateLevelUI();
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback";
+        newQuestion();
+      });
+    });
+
+    btnNext.addEventListener("click", () => {
+      if (challengeActive) return;
+      newQuestion();
+    });
+
+    btnRestart.addEventListener("click", () => {
+      if (challengeActive) return;
+      correctInLevel = 0;
+      updateLevelUI();
+      feedbackEl.textContent = "";
+      feedbackEl.className = "feedback";
+      newQuestion();
+    });
+
+    btnHelp.addEventListener("click", () => {
+      if (challengeActive) return;
+      const lv = levels[currentLevelIndex];
+      feedbackEl.className = "feedback";
+      feedbackEl.textContent =
+        `🔍 小提示：${lv.tip}\n如果是数一数，可以边点边数；如果是“第几个”，一定要从左边第 1 个开始数。`;
+    });
+
+    // ======= 排行榜 & 挑战模式 =======
+    function getLeaderboard() {
+      try {
+        const raw = localStorage.getItem("g1_world1_leaderboard");
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLeaderboard(list) {
+      try {
+        localStorage.setItem("g1_world1_leaderboard", JSON.stringify(list));
+      } catch {}
+    }
+
+    function renderLeaderboard() {
+      const list = getLeaderboard();
+      if (!list.length) {
+        leaderboardEl.textContent = "挑战排行榜：还没有记录，快来成为第一个吧！";
+        return;
+      }
+      let html = "<strong>挑战排行榜（60 秒内答对题数）：</strong><br>";
+      list.forEach((item, idx) => {
+        const d = new Date(item.time);
+        const label =
+          `${d.getMonth() + 1}/${d.getDate()} ` +
+          `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+        html += `${idx + 1}. ${item.score} 题（${label}）<br>`;
+      });
+      leaderboardEl.innerHTML = html;
+    }
+
+    function updateLeaderboard(score) {
+      let list = getLeaderboard();
+      list.push({ score, time: Date.now() });
+      list.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.time - b.time;
+      });
+      list = list.slice(0, 5);
+      saveLeaderboard(list);
+      renderLeaderboard();
+    }
+
+    function unlockChallenge() {
+      if (challengeUnlocked) return;
+      challengeUnlocked = true;
+      try {
+        localStorage.setItem("g1_world1_challenge_unlocked", "1");
+      } catch {}
+      btnChallenge.disabled = false;
+      btnChallenge.textContent = "🔥 挑战模式：1 分钟数数大考验（已解锁，点击开始）";
+      challengeStatusEl.textContent =
+        "挑战模式已解锁：60 秒内看你能做对多少道题！题目会包含数数、数轴和“十几”的问题。";
+    }
+
+    function loadChallengeUnlock() {
+      try {
+        const flag = localStorage.getItem("g1_world1_challenge_unlocked");
+        if (flag === "1") {
+          challengeUnlocked = true;
+          btnChallenge.disabled = false;
+          btnChallenge.textContent = "🔥 挑战模式：1 分钟数数大考验（已解锁，点击开始）";
+          challengeStatusEl.textContent =
+            "挑战模式已解锁：60 秒内看你能做对多少道题！题目会包含数数、数轴和“十几”的问题。";
+        }
+      } catch {}
+    }
+
+    function startChallenge() {
+      if (!challengeUnlocked || challengeActive) return;
+      challengeActive = true;
+      challengeScore = 0;
+      challengeTimeLeft = 60;
+
+      currentLevelIndex = 2; // 用困难等级题型
+      correctInLevel = 0;
+      updateDiffButtons();
+
+      levelLabelEl.textContent = "挑战模式：1 分钟数数大考验";
+      levelProgressEl.textContent = "-";
+      feedbackEl.textContent = "";
+      feedbackEl.className = "feedback";
+
+      btnRestart.disabled = true;
+      btnHelp.disabled = true;
+      btnNext.disabled = true;
+
+      tipTextEl.style.display = "none";
+
+      challengeStatusEl.textContent =
+        `挑战模式进行中：剩余 ${challengeTimeLeft} 秒，已答对 0 题。`;
+
+      if (challengeTimerId) clearInterval(challengeTimerId);
+      challengeTimerId = setInterval(() => {
+        challengeTimeLeft--;
+        if (challengeTimeLeft <= 0) {
+          endChallenge();
+        } else {
+          challengeStatusEl.textContent =
+            `挑战模式进行中：剩余 ${challengeTimeLeft} 秒，已答对 ${challengeScore} 题。`;
+        }
+      }, 1000);
+
+      newQuestion();
+    }
+
+    function endChallenge() {
+      if (!challengeActive) return;
+      challengeActive = false;
+      clearInterval(challengeTimerId);
+      challengeTimerId = null;
+
+      challengeStatusEl.textContent =
+        `本轮结束：你在 60 秒内一共答对了 ${challengeScore} 题！可以再试一次挑战，或者回到普通模式继续练习。`;
+
+      btnRestart.disabled = false;
+      btnHelp.disabled = false;
+      btnNext.disabled = false;
+
+      currentLevelIndex = 2;
+      updateLevelUI();
+
+      updateLeaderboard(challengeScore);
+    }
+
+    btnChallenge.addEventListener("click", () => {
+      if (!challengeUnlocked) return;
+      startChallenge();
+    });
+
+    // ======= 初始化 =======
+    function init() {
+      loadChallengeUnlock();
+      renderLeaderboard();
+      updateDiffButtons();
+      updateLevelUI();
+      newQuestion();
+    }
+
+    init();
+  </script>
+</body>
+</html>
